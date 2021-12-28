@@ -4,6 +4,7 @@ import Login from "./screens/Login";
 import Signup from "./screens/Signup";
 import GoodsList from "./screens/goodsScreen/GoodsList";
 import Community from "./screens/communityScreen/Community";
+import BoardDetail from "./screens/BoardDetail";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/usedGoods" element={<GoodsList />} />
         <Route path="/community" element={<Community />} />
+        <Route path="/boardDetail" element={<BoardDetail />} />
       </Routes>
     </div>
   );
