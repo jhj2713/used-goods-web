@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { Row, Col, Card } from "react-bootstrap";
+import UserUpdate from "../components/UserUpdate";
+import UserBoardList from "../components/UserBoardList";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -74,7 +76,13 @@ function Mypage() {
         </Col>
         <Col md={{ span: 8 }}>
           <Card>
-            <Card.Body></Card.Body>
+            <Card.Body>
+              {typeNumber === 1 ? (
+                <UserUpdate />
+              ) : (
+                <UserBoardList boards={boards} />
+              )}
+            </Card.Body>
           </Card>
         </Col>
       </Row>
