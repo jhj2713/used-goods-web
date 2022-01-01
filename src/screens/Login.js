@@ -1,6 +1,8 @@
 import { useState } from "react";
-import { FloatingLabel, Form, Button } from "react-bootstrap";
+import { FloatingLabel, Form, Button, Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { login } from "../modules/user";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -19,8 +21,11 @@ const ErrorMsg = styled.p`
 
 function Login() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [user, setUser] = useState({ email: "", password: "" });
   const [errorMsg, setErrorMsg] = useState("");
+  const [show, setShow] = useState(false);
 
   const _handleChange = (e) => {
     setUser({ ...user, [e.target.type]: e.target.value });
@@ -33,12 +38,24 @@ function Login() {
       setErrorMsg("비밀번호를 입력해주세요");
     } else {
       setErrorMsg("");
-      navigate("/usedGoods");
+      dispatch(login(user))
+        .then((res) => {
+          navigate("/usedGoods");
+        })
+        .catch((err) => {
+          setShow(true);
+        });
     }
+  };
+  const _handleClose = () => {
+    setShow(false);
   };
 
   return (
     <Container>
+      <Modal show={show} onHide={_handleClose}>
+        <Modal.Body>로그인에 실패했습니다</Modal.Body>
+      </Modal>
       <Form onSubmit={_handleSubmit}>
         <FloatingLabel className="mb-3" label="Email" controlId="floatingInput">
           <Form.Control
