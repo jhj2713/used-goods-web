@@ -1,5 +1,5 @@
 import "../../firebase";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
 
 const auth = getAuth();
 
@@ -11,6 +11,6 @@ export const login = (user) => {
   );
 };
 
-export const logout = (user) => {
-  return { data: null };
+export const logout = () => {
+  return signOut(auth);
 };

@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
-import { Row, Col, Card } from "react-bootstrap";
+import { Row, Col, Card, Button } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { logout } from "../modules/user";
 import UserUpdate from "../components/UserUpdate";
 import UserBoardList from "../components/UserBoardList";
 import styled from "styled-components";
@@ -20,8 +23,18 @@ const StyledCol = styled(Col)`
   justify-content: center;
   text-align: center;
 `;
+const StyledButton = styled(Button)`
+  text-decoration: none;
+  color: lightgray;
+  :hover {
+    color: gray;
+  }
+`;
 
 function Mypage() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [user, setUser] = useState({
     id: 1,
     username: "유저명",
@@ -42,6 +55,11 @@ function Mypage() {
     ]);
   }, []);
 
+  const _handleLogout = () => {
+    dispatch(logout());
+    navigate("/login");
+  };
+
   return (
     <Container>
       <Row xs={1} md={2} className="g-4">
@@ -51,6 +69,9 @@ function Mypage() {
               <StyledUser onClick={() => setTypeNumber(1)}>
                 {user.username}
               </StyledUser>
+              <StyledButton variant="link" onClick={_handleLogout}>
+                로그아웃
+              </StyledButton>
             </CardBox>
             <Row>
               <StyledCol>
