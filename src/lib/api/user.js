@@ -1,5 +1,10 @@
-import "../../firebase";
-import { getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { firestore } from "../../firebase";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  signOut,
+  createUserWithEmailAndPassword,
+} from "firebase/auth";
 
 const auth = getAuth();
 
@@ -9,6 +14,24 @@ export const login = (user) => {
       return res.user;
     },
   );
+};
+
+export const doublecheckEmail = (user) => {
+  return firestore
+    .collection("user")
+    .where("email", "==", user.email)
+    .get()
+    .then((res) => {
+      if (res.docs.length > 0) {
+        return false;
+      } else {
+        return true;
+      }
+    });
+};
+
+export const signup = (user) => {
+  firestore.collection("user").add(user);
 };
 
 export const logout = () => {

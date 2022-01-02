@@ -1,8 +1,8 @@
-import "firebase/firestore";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FloatingLabel, Form, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { firestore } from "../firebase";
+import { useDispatch, useSelector } from "react-redux";
+import { signup, checkEmail } from "../modules/user";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -34,6 +34,11 @@ const StyledCheck = styled.p`
 
 function Signup() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { mailCheck } = useSelector(({ user }) => ({
+    mailCheck: user.checkEmail,
+  }));
+
   const [user, setUser] = useState({ email: "", username: "", password: "" });
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
@@ -53,24 +58,30 @@ function Signup() {
     } else if (user.password !== passwordConfirm) {
       setErrorMsg("비밀번호가 일치하지 않습니다");
     } else if (!checked) {
-      setErrorMsg("이름 중복확인을 해주세요");
+      setErrorMsg("이메일 중복확인을 해주세요");
     } else {
       setErrorMsg("");
-      firestore
-        .collection("user")
-        .add(user)
-        .then((res) => {
-          navigate("/login");
-        });
+      dispatch(signup(user)).then(() => {
+        navigate("/login");
+      });
     }
   };
   const _handlePwdConfirm = (e) => {
     setPasswordConfirm(e.target.value);
   };
   const _handleCheck = () => {
-    setErrorMsg("이미 존재하는 이름입니다");
-    setChecked(false);
+    dispatch(checkEmail(user)).then(() => {
+      if (mailCheck === true) {
+        setErrorMsg("");
+        setChecked(true);
+      } else if (mailCheck === false) {
+        setErrorMsg("이미 존재하는 이메일입니다");
+        setChecked(false);
+      }
+    });
   };
+
+  useEffect(() => {}, [mailCheck]);
 
   return (
     <Container>
@@ -82,6 +93,9 @@ function Signup() {
             onChange={_handleChange}
             type="email"
           />
+          <CheckBox>
+            <StyledCheck onClick={_handleCheck}>중복확인</StyledCheck>
+          </CheckBox>
         </FloatingLabel>
         <FloatingLabel
           className="mb-3"
@@ -94,9 +108,6 @@ function Signup() {
             onChange={_handleChange}
             type="text"
           />
-          <CheckBox>
-            <StyledCheck onClick={_handleCheck}>중복확인</StyledCheck>
-          </CheckBox>
         </FloatingLabel>
         <FloatingLabel
           className="mb-3"
