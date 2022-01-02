@@ -70,18 +70,18 @@ function Signup() {
     setPasswordConfirm(e.target.value);
   };
   const _handleCheck = () => {
-    dispatch(checkEmail(user)).then(() => {
-      if (mailCheck === true) {
-        setErrorMsg("");
-        setChecked(true);
-      } else if (mailCheck === false) {
-        setErrorMsg("이미 존재하는 이메일입니다");
-        setChecked(false);
-      }
-    });
+    dispatch(checkEmail(user));
   };
 
-  useEffect(() => {}, [mailCheck]);
+  useEffect(() => {
+    if (mailCheck === true) {
+      setErrorMsg("");
+      setChecked(true);
+    } else if (mailCheck === false) {
+      setErrorMsg("이미 존재하는 이메일입니다");
+      setChecked(false);
+    }
+  }, [mailCheck]);
 
   return (
     <Container>
