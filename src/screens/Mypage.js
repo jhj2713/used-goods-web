@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Row, Col, Card, Button } from "react-bootstrap";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../modules/user";
 import UserUpdate from "../components/UserUpdate";
@@ -34,11 +34,10 @@ const StyledButton = styled(Button)`
 function Mypage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { user } = useSelector(({ user }) => ({
+    user: user.user,
+  }));
 
-  const [user, setUser] = useState({
-    id: 1,
-    username: "유저명",
-  });
   const [typeNumber, setTypeNumber] = useState(1);
   const [boards, setBoards] = useState([]);
 
@@ -67,7 +66,7 @@ function Mypage() {
           <Card>
             <CardBox>
               <StyledUser onClick={() => setTypeNumber(1)}>
-                {user.username}
+                {user.displayName}
               </StyledUser>
               <StyledButton variant="link" onClick={_handleLogout}>
                 로그아웃

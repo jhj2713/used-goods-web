@@ -18,26 +18,10 @@ const ErrorMsg = styled.p`
   font-size: 15px;
   color: red;
 `;
-const CheckBox = styled.div`
-  display: flex;
-  justify-content: flex-end;
-`;
-const StyledCheck = styled.p`
-  font-size: 15px;
-  margin-top: 10px;
-  margin-bottom: 0;
-  cursor: pointer;
-  :hover {
-    color: gray;
-  }
-`;
 
 function Signup() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { mailCheck } = useSelector(({ user }) => ({
-    mailCheck: user.checkEmail,
-  }));
 
   const [user, setUser] = useState({ email: "", username: "", password: "" });
   const [passwordConfirm, setPasswordConfirm] = useState("");
@@ -57,31 +41,20 @@ function Signup() {
       setErrorMsg("비밀번호를 6자 이상 입력해주세요");
     } else if (user.password !== passwordConfirm) {
       setErrorMsg("비밀번호가 일치하지 않습니다");
-    } else if (!checked) {
-      setErrorMsg("이메일 중복확인을 해주세요");
     } else {
       setErrorMsg("");
-      dispatch(signup(user)).then(() => {
-        navigate("/login");
-      });
+      dispatch(signup(user))
+        .then(() => {
+          navigate("/login");
+        })
+        .catch(() => {
+          setErrorMsg("존재하는 이메일입니다");
+        });
     }
   };
   const _handlePwdConfirm = (e) => {
     setPasswordConfirm(e.target.value);
   };
-  const _handleCheck = () => {
-    dispatch(checkEmail(user));
-  };
-
-  useEffect(() => {
-    if (mailCheck === true) {
-      setErrorMsg("");
-      setChecked(true);
-    } else if (mailCheck === false) {
-      setErrorMsg("이미 존재하는 이메일입니다");
-      setChecked(false);
-    }
-  }, [mailCheck]);
 
   return (
     <Container>
@@ -93,9 +66,6 @@ function Signup() {
             onChange={_handleChange}
             type="email"
           />
-          <CheckBox>
-            <StyledCheck onClick={_handleCheck}>중복확인</StyledCheck>
-          </CheckBox>
         </FloatingLabel>
         <FloatingLabel
           className="mb-3"

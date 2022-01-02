@@ -1,9 +1,10 @@
-import { firestore } from "../../firebase";
+import "../../firebase";
 import {
+  createUserWithEmailAndPassword,
   getAuth,
   signInWithEmailAndPassword,
   signOut,
-  createUserWithEmailAndPassword,
+  updateProfile,
 } from "firebase/auth";
 
 const auth = getAuth();
@@ -16,22 +17,13 @@ export const login = (user) => {
   );
 };
 
-export const doublecheckEmail = (user) => {
-  return firestore
-    .collection("user")
-    .where("email", "==", user.email)
-    .get()
-    .then((res) => {
-      if (res.docs.length > 0) {
-        return false;
-      } else {
-        return true;
-      }
-    });
-};
-
 export const signup = (user) => {
-  firestore.collection("user").add(user);
+  return createUserWithEmailAndPassword(auth, user.email, user.password).then(
+    () => {
+      updateProfile(auth.currentUser, { displayName: user.username });
+      return true;
+    },
+  );
 };
 
 export const logout = () => {
