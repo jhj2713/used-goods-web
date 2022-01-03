@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import ReactQuill from "react-quill";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { saveBoard, updateBoard } from "../modules/community";
+import { loadBoards, saveBoard, updateBoard } from "../modules/community";
 import { Button, FormControl } from "react-bootstrap";
 import styled from "styled-components";
 import "react-quill/dist/quill.snow.css";
@@ -77,7 +77,9 @@ function WriteForm() {
         id: Number(pathname.split("/")[2]),
       };
       dispatch(updateBoard(board)).then(() => {
-        navigate("/boardDetail/" + board.id);
+        dispatch(loadBoards()).then(() => {
+          navigate("/boardDetail/" + board.id);
+        });
       });
     } else {
       const board = {
@@ -88,7 +90,9 @@ function WriteForm() {
         id: Date.parse(new Date()),
       };
       dispatch(saveBoard(board)).then(() => {
-        navigate("/community", { replace: true });
+        dispatch(loadBoards()).then(() => {
+          navigate("/community", { replace: true });
+        });
       });
     }
   };

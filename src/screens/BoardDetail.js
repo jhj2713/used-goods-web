@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Button } from "react-bootstrap";
 import Comments from "../components/Comments";
-import { deleteBoard } from "../modules/community";
+import { deleteBoard, loadBoards } from "../modules/community";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -62,7 +62,9 @@ function BoardDetail() {
   };
   const _handleDelete = () => {
     dispatch(deleteBoard(board)).then(() => {
-      navigate("/community");
+      dispatch(loadBoards()).then(() => {
+        navigate("/community");
+      });
     });
   };
 

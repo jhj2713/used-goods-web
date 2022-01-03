@@ -9,18 +9,9 @@ const Container = styled.div`
 `;
 
 function UserUpdate() {
-  const { oldUser } = useSelector(({ user }) => ({
-    oldUser: user.user,
+  const { user } = useSelector(({ user }) => ({
+    user: user.user,
   }));
-  const [user, setUser] = useState({});
-
-  const _handleChange = (e) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
-  };
-
-  useEffect(() => {
-    setUser(oldUser);
-  }, []);
 
   return (
     <Container>
@@ -29,7 +20,6 @@ function UserUpdate() {
           <Form.Control
             name="email"
             value={user.email}
-            onChange={_handleChange}
             type="email"
             placeholder="Enter email"
             disabled
@@ -43,7 +33,6 @@ function UserUpdate() {
           <Form.Control
             name="displayName"
             value={user.displayName}
-            onChange={_handleChange}
             type="text"
             disabled
           />

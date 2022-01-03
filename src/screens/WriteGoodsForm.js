@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button, FormControl } from "react-bootstrap";
 import styled from "styled-components";
 import "react-quill/dist/quill.snow.css";
-import { saveGoods, updateGoods } from "../modules/goods";
+import { saveGoods, updateGoods, loadGoods } from "../modules/goods";
 
 const modules = {
   toolbar: [
@@ -77,7 +77,9 @@ function WriteGoodsForm() {
         id: Number(pathname.split("/")[2]),
       };
       dispatch(updateGoods(board)).then(() => {
-        navigate("/goodsDetail/" + board.id);
+        dispatch(loadGoods()).then(() => {
+          navigate("/goodsDetail/" + board.id);
+        });
       });
     } else {
       const board = {
@@ -88,7 +90,9 @@ function WriteGoodsForm() {
         id: Date.parse(new Date()),
       };
       dispatch(saveGoods(board)).then(() => {
-        navigate("/usedGoods", { replace: true });
+        dispatch(loadGoods()).then(() => {
+          navigate("/usedGoods", { replace: true });
+        });
       });
     }
   };

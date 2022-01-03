@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Button } from "react-bootstrap";
 import Comments from "../components/Comments";
-import { deleteGoods } from "../modules/goods";
+import { deleteGoods, loadGoods } from "../modules/goods";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -62,7 +62,9 @@ function GoodsDetail() {
   };
   const _handleDelete = () => {
     dispatch(deleteGoods(board)).then(() => {
-      navigate("/usedGoods");
+      dispatch(loadGoods()).then(() => {
+        navigate("/usedGoods");
+      });
     });
   };
 
