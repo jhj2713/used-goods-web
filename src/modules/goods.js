@@ -23,7 +23,7 @@ const [
   PAGINATION_PREV_BOARD_FAILURE,
 ] = createRequestActionTypes("goods/PAGINATION_PREV_BOARD");
 const [LOAD_WRITE_GOODS, LOAD_WRITE_GOODS_SUCCESS, LOAD_WRITE_GOODS_FAILURE] =
-  createRequestActionTypes("goods/LOAT_WRITE_GOODS");
+  createRequestActionTypes("goods/LOAD_WRITE_GOODS");
 
 export const loadGoods = createRequestThunk(LOAD, goodsAPI.loadGoods);
 export const saveGoods = createRequestThunk(SAVE, goodsAPI.saveGoods);

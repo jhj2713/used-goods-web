@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import { logout } from "../modules/user";
 import { loadWriteList } from "../modules/community";
+import { loadWriteGoods } from "../modules/goods";
 import UserUpdate from "../components/UserUpdate";
 import UserBoardList from "../components/UserBoardList";
 import styled from "styled-components";
@@ -47,6 +48,7 @@ function Mypage() {
 
   useEffect(() => {
     dispatch(loadWriteList(user));
+    dispatch(loadWriteGoods(user));
   }, []);
 
   const _handleLogout = () => {
