@@ -41,8 +41,7 @@ const initialState = {
   lastDoc: null,
   save: null,
   deleteBoard: null,
-  isLast: null,
-  isFirst: null,
+  isLast: false,
 };
 
 export default handleActions(
@@ -95,7 +94,7 @@ export default handleActions(
       ...state,
       boards: docs.boards,
       lastDoc: docs.lastDoc,
-      isLast: docs.isEmpty,
+      isLast: docs.isLast,
       error: null,
     }),
     [PAGINATION_NEXT_BOARD_FAILURE]: (state, { payload: error }) => ({
@@ -109,14 +108,14 @@ export default handleActions(
       ...state,
       boards: docs.boards,
       lastDoc: docs.lastDoc,
-      isFirst: docs.isEmpty,
+      isLast: docs.isLast,
       error: null,
     }),
     [PAGINATION_PREV_BOARD_FAILURE]: (state, { payload: error }) => ({
       ...state,
       boards: null,
       lastDoc: null,
-      isFirst: null,
+      isLast: null,
       error,
     }),
   },

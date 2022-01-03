@@ -60,11 +60,11 @@ export const paginationPrevBoard = ({ lastDoc }) => {
     .then((res) => {
       const boards = res.docs.map((doc) => doc.data());
       const lastDoc = res.docs[res.docs.length - 1];
-      let isFirst = false;
-      if (res.size < 7) {
-        isFirst = true;
+      let isLast = true;
+      if (res.size >= 7) {
+        isLast = false;
       }
-      return { boards, lastDoc, isFirst };
+      return { boards, lastDoc, isLast };
     });
 };
 
