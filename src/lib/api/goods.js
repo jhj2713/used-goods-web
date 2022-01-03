@@ -16,17 +16,55 @@ export const updateGoods = (board) => {
 };
 
 export const loadGoods = () => {
-  let boards = [];
   return firestore
     .collection("goods")
-    .orderBy("date")
-    .limit(7)
+    .orderBy("date", "desc")
+    .limit(6)
     .get()
     .then((res) => {
-      res.docs.forEach((doc) => {
-        boards.push(doc.data());
-      });
-      return boards;
+      const goodsBoards = res.docs.map((doc) => doc.data());
+      const lastDoc = res.docs[res.docs.length - 1];
+      let isLast = false;
+      if (res.size < 6) {
+        isLast = true;
+      }
+      return { goodsBoards, lastDoc, isLast };
+    });
+};
+
+export const paginationNextBoard = ({ lastDoc }) => {
+  return firestore
+    .collection("goods")
+    .orderBy("date", "desc")
+    .startAfter(lastDoc)
+    .limit(6)
+    .get()
+    .then((res) => {
+      const goodsBoards = res.docs.map((doc) => doc.data());
+      const lastDoc = res.docs[res.docs.length - 1];
+      let isLast = false;
+      if (res.size < 6) {
+        isLast = true;
+      }
+      return { goodsBoards, lastDoc, isLast };
+    });
+};
+
+export const paginationPrevBoard = ({ lastDoc }) => {
+  return firestore
+    .collection("goods")
+    .orderBy("date", "desc")
+    .endBefore(lastDoc)
+    .limit(6)
+    .get()
+    .then((res) => {
+      const goodsBoards = res.docs.map((doc) => doc.data());
+      const lastDoc = res.docs[res.docs.length - 1];
+      let isLast = true;
+      if (res.size >= 6) {
+        isLast = false;
+      }
+      return { goodsBoards, lastDoc, isLast };
     });
 };
 

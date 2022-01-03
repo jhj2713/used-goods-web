@@ -2,7 +2,11 @@ import { useState, useEffect } from "react";
 import { Row, Col, Card, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { loadGoods } from "../../modules/goods";
+import {
+  loadGoods,
+  paginationPrevBoard,
+  paginationNextBoard,
+} from "../../modules/goods";
 import Pagination from "../../components/Pagination";
 import styled from "styled-components";
 import Search from "../../components/Search";
@@ -32,8 +36,10 @@ const ButtonBox = styled.div`
 function GoodsList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { goodsBoards } = useSelector(({ goods }) => ({
+  const { goodsBoards, isLast, lastDoc } = useSelector(({ goods }) => ({
     goodsBoards: goods.goodsBoards,
+    isLast: goods.isLast,
+    lastDoc: goods.lastDoc,
   }));
 
   const [goods, setGoods] = useState([]);
@@ -41,9 +47,11 @@ function GoodsList() {
   const [searchValue, setSearchValue] = useState("");
 
   const _handlePrev = () => {
+    dispatch(paginationPrevBoard({ lastDoc }));
     setPage((page) => page - 1);
   };
   const _handleNext = () => {
+    dispatch(paginationNextBoard({ lastDoc }));
     setPage((page) => page + 1);
   };
   const _handleSearch = () => {
@@ -51,10 +59,11 @@ function GoodsList() {
   };
 
   useEffect(() => {
-    dispatch(loadGoods()).then(() => {
-      setGoods(goodsBoards);
-    });
+    dispatch(loadGoods());
   }, []);
+  useEffect(() => {
+    setGoods(goodsBoards);
+  }, [goodsBoards]);
 
   return (
     <Container>
@@ -84,7 +93,7 @@ function GoodsList() {
       <PageContainer>
         <Pagination
           page={page}
-          lastPage={10}
+          isLast={isLast}
           clickPrev={_handlePrev}
           clickNext={_handleNext}
         />
