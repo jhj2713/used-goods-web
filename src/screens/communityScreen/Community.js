@@ -2,7 +2,11 @@ import { useState, useEffect } from "react";
 import { Button, ListGroup } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { loadBoards, paginationNextBoard } from "../../modules/community";
+import {
+  loadBoards,
+  paginationNextBoard,
+  paginationPrevBoard,
+} from "../../modules/community";
 import Pagination from "../../components/Pagination";
 import Search from "../../components/Search";
 import styled from "styled-components";
@@ -52,9 +56,11 @@ function Community() {
   const [searchValue, setSearchValue] = useState("");
 
   const _handlePrev = () => {
+    dispatch(paginationPrevBoard({ lastDoc }));
     setPage((page) => page - 1);
   };
   const _handleNext = () => {
+    dispatch(paginationNextBoard({ lastDoc }));
     setPage((page) => page + 1);
   };
   const _handleSearch = () => {
@@ -62,12 +68,8 @@ function Community() {
   };
 
   useEffect(() => {
-    if (lastDoc) {
-      dispatch(paginationNextBoard({ lastDoc }));
-    } else {
-      dispatch(loadBoards());
-    }
-  }, [page]);
+    dispatch(loadBoards());
+  }, []);
   useEffect(() => {
     setListItem(boards);
   }, [boards]);

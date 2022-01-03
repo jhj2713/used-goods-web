@@ -12,16 +12,28 @@ const [UPDATE, UPDATE_SUCCESS, UPDATE_FAILURE] =
   createRequestActionTypes("community/UPDATE");
 const [DELETE, DELETE_SUCCESS, DELETE_FAILURE] =
   createRequestActionTypes("community/DELETE");
-const [PAGINATION_BOARD, PAGINATION_BOARD_SUCCESS, PAGINATION_BOARD_FAILURE] =
-  createRequestActionTypes("community/PAGINATION_BOARD");
+const [
+  PAGINATION_NEXT_BOARD,
+  PAGINATION_NEXT_BOARD_SUCCESS,
+  PAGINATION_NEXT_BOARD_FAILURE,
+] = createRequestActionTypes("community/PAGINATION_NEXT_BOARD");
+const [
+  PAGINATION_PREV_BOARD,
+  PAGINATION_PREV_BOARD_SUCCESS,
+  PAGINATION_PREV_BOARD_FAILURE,
+] = createRequestActionTypes("community/PAGINATION_PREV_BOARD");
 
 export const loadBoards = createRequestThunk(LOAD, comAPI.loadBoards);
 export const saveBoard = createRequestThunk(SAVE, comAPI.saveBoard);
 export const updateBoard = createRequestThunk(UPDATE, comAPI.updateBoard);
 export const deleteBoard = createRequestThunk(DELETE, comAPI.deleteBoard);
 export const paginationNextBoard = createRequestThunk(
-  PAGINATION_BOARD,
+  PAGINATION_NEXT_BOARD,
   comAPI.paginationNextBoard,
+);
+export const paginationPrevBoard = createRequestThunk(
+  PAGINATION_PREV_BOARD,
+  comAPI.paginationPrevBoard,
 );
 
 const initialState = {
@@ -30,6 +42,7 @@ const initialState = {
   save: null,
   deleteBoard: null,
   isLast: null,
+  isFirst: null,
 };
 
 export default handleActions(
@@ -78,18 +91,32 @@ export default handleActions(
       delete: null,
       error,
     }),
-    [PAGINATION_BOARD_SUCCESS]: (state, { payload: docs }) => ({
+    [PAGINATION_NEXT_BOARD_SUCCESS]: (state, { payload: docs }) => ({
       ...state,
       boards: docs.boards,
       lastDoc: docs.lastDoc,
       isLast: docs.isEmpty,
       error: null,
     }),
-    [PAGINATION_BOARD_FAILURE]: (state, { payload: error }) => ({
+    [PAGINATION_NEXT_BOARD_FAILURE]: (state, { payload: error }) => ({
       ...state,
       boards: null,
       lastDoc: null,
       isLast: null,
+      error,
+    }),
+    [PAGINATION_PREV_BOARD_SUCCESS]: (state, { payload: docs }) => ({
+      ...state,
+      boards: docs.boards,
+      lastDoc: docs.lastDoc,
+      isFirst: docs.isEmpty,
+      error: null,
+    }),
+    [PAGINATION_PREV_BOARD_FAILURE]: (state, { payload: error }) => ({
+      ...state,
+      boards: null,
+      lastDoc: null,
+      isFirst: null,
       error,
     }),
   },
