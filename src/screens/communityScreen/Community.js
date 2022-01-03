@@ -76,14 +76,14 @@ function Community() {
       </SearchBox>
       <ListGroup variant="flush">
         {listItem.map((item) => (
-          <ListGroup.Item key={item.userId}>
+          <ListGroup.Item key={item.id}>
             <StyledTitle
               style={{ float: "left" }}
-              onClick={() => navigate("/boarddetail")}
+              onClick={() => navigate("/boarddetail/" + item.id)}
             >
               {item.title}
             </StyledTitle>
-            <StyledUser style={{ float: "right" }}>{item.user}</StyledUser>
+            <StyledUser style={{ float: "right" }}>{item.userId}</StyledUser>
           </ListGroup.Item>
         ))}
       </ListGroup>

@@ -1,5 +1,9 @@
 import { firestore } from "../../firebase";
 
+export const save = (board) => {
+  firestore.collection("community").add(board);
+};
+
 export const load = () => {
   let boards = [];
   return firestore

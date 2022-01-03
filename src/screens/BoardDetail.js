@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Button } from "react-bootstrap";
 import Comments from "../components/Comments";
-import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   margin: 50px;
@@ -13,11 +14,19 @@ const StyledBoard = styled.div`
   padding-bottom: 20px;
   border-bottom: 1px solid gray;
 `;
+const TitleBox = styled.div`
+  display: flex;
+  border-bottom: 1px solid gray;
+  justify-content: space-between;
+`;
 const StyledTitle = styled.p`
   font-size: 30px;
   padding-bottom: 20px;
-  border-bottom: 1px solid gray;
   font-weight: bold;
+`;
+const StyledUser = styled.p`
+  font-size: 15px;
+  margin-top: 20px;
 `;
 const StyledContent = styled.p`
   font-size: 20px;
@@ -30,6 +39,13 @@ const ButtonBox = styled.div`
 
 function BoardDetail() {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const { boards } = useSelector(({ community }) => ({
+    boards: community.boards,
+  }));
+
+  const boardId = Number(pathname.split("/")[2]);
+  const [board, setBoard] = useState({ title: "", content: "", userId: "" });
   const [comments, setComments] = useState([
     { id: 1, content: "댓글댓글", user: "유저명" },
     { id: 2, content: "댓글댓글", user: "유저명" },
@@ -40,14 +56,27 @@ function BoardDetail() {
   ]);
 
   const _handleUpdate = () => {
-    navigate("/updateBoard");
+    navigate("/updateBoard/" + boardId);
   };
+
+  useEffect(() => {
+    setBoard(
+      boards.find((item) => {
+        return item.id === boardId;
+      }),
+    );
+  }, []);
 
   return (
     <Container>
       <StyledBoard>
-        <StyledTitle>제목</StyledTitle>
-        <StyledContent>내용</StyledContent>
+        <TitleBox>
+          <StyledTitle>{board.title}</StyledTitle>
+          <StyledUser>{board.userId}</StyledUser>
+        </TitleBox>
+        <StyledContent
+          dangerouslySetInnerHTML={{ __html: board.content }}
+        ></StyledContent>
         <ButtonBox>
           <Button variant="outline-secondary" size="sm" onClick={_handleUpdate}>
             수정하기

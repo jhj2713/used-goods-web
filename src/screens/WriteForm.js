@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import ReactQuill from "react-quill";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { save } from "../modules/community";
 import { Button, FormControl } from "react-bootstrap";
 import styled from "styled-components";
 import "react-quill/dist/quill.snow.css";
@@ -50,6 +52,12 @@ const ButtonBox = styled.div`
 function WriteForm() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const dispatch = useDispatch();
+  const { username, boards } = useSelector(({ user, community }) => ({
+    username: user.user.displayName,
+    boards: community.boards,
+  }));
+
   const [value, setValue] = useState("");
   const [title, setTitle] = useState("");
 
@@ -59,11 +67,26 @@ function WriteForm() {
   const _handleChange = (value) => {
     setValue(value);
   };
+  const _handleSubmit = () => {
+    const board = {
+      title: title,
+      content: value,
+      userId: username,
+      date: new Date(),
+    };
+    dispatch(save(board)).then(() => {
+      navigate("/community", { replace: true });
+    });
+  };
 
   useEffect(() => {
     if (pathname.includes("update")) {
-      setTitle("제목");
-      setValue("내용");
+      const boardId = Number(pathname.split("/")[2]);
+      const board = boards.find((item) => {
+        return item.id === boardId;
+      });
+      setTitle(board.title);
+      setValue(board.content);
     }
   }, []);
 
@@ -96,7 +119,9 @@ function WriteForm() {
         >
           취소하기
         </Button>
-        <Button variant="outline-secondary">작성하기</Button>
+        <Button variant="outline-secondary" onClick={_handleSubmit}>
+          작성하기
+        </Button>
       </ButtonBox>
     </Container>
   );
