@@ -40,7 +40,7 @@ export default handleActions(
       doubleCheck,
       error: null,
     }),
-    [SIGNUP_FAILURE]: (state, { payload: error }) => ({
+    [CHECK_NAME_FAILURE]: (state, { payload: error }) => ({
       ...state,
       doubleCheck: null,
       error,
