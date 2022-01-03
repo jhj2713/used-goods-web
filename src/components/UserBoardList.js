@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { ListGroup } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -23,11 +23,9 @@ const StyledUser = styled.p`
 
 function UserBoardList({ boards }) {
   const navigate = useNavigate();
-  const [listItem, setListItem] = useState([]);
+  const { pathname } = useLocation();
 
-  const _handleClick = () => {
-    navigate("/boardDetail");
-  };
+  const [listItem, setListItem] = useState([]);
 
   useEffect(() => {
     setListItem(boards);
@@ -39,7 +37,14 @@ function UserBoardList({ boards }) {
         {listItem &&
           listItem.map((item) => (
             <ListGroup.Item key={item.id}>
-              <StyledTitle style={{ float: "left" }} onClick={_handleClick}>
+              <StyledTitle
+                style={{ float: "left" }}
+                onClick={() => {
+                  pathname.includes("used")
+                    ? navigate("/goodsDetail/" + item.id)
+                    : navigate("/boardDetail/" + item.id);
+                }}
+              >
                 {item.title}
               </StyledTitle>
               <StyledUser style={{ float: "right" }}>{item.user}</StyledUser>

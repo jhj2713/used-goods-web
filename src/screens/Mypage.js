@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Row, Col, Card, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { logout } from "../modules/user";
 import { loadWriteList } from "../modules/community";
 import UserUpdate from "../components/UserUpdate";
@@ -35,6 +35,8 @@ const StyledButton = styled(Button)`
 function Mypage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+
   const { user, communityBoards, usedGoodsBoards } = useSelector(
     ({ user, community, goods }) => ({
       user: user.user,
@@ -42,8 +44,6 @@ function Mypage() {
       usedGoodsBoards: goods.goodsBoards,
     }),
   );
-
-  const [typeNumber, setTypeNumber] = useState(1);
 
   useEffect(() => {
     dispatch(loadWriteList(user));
@@ -60,7 +60,11 @@ function Mypage() {
         <Col md={{ span: 4 }}>
           <Card>
             <CardBox>
-              <StyledUser onClick={() => setTypeNumber(1)}>
+              <StyledUser
+                onClick={() => {
+                  navigate("/mypage");
+                }}
+              >
                 {user.displayName}
               </StyledUser>
               <StyledButton variant="link" onClick={_handleLogout}>
@@ -71,7 +75,9 @@ function Mypage() {
               <StyledCol>
                 <div
                   style={{ cursor: "pointer" }}
-                  onClick={() => setTypeNumber(2)}
+                  onClick={() => {
+                    navigate("/mypage/usedBoards");
+                  }}
                 >
                   <p>중고거래 글</p>
                   <p>{usedGoodsBoards.length}</p>
@@ -80,7 +86,9 @@ function Mypage() {
               <StyledCol>
                 <div
                   style={{ cursor: "pointer" }}
-                  onClick={() => setTypeNumber(3)}
+                  onClick={() => {
+                    navigate("/mypage/communityBoards");
+                  }}
                 >
                   <p>커뮤니티 글</p>
                   <p>{communityBoards.length}</p>
@@ -92,12 +100,16 @@ function Mypage() {
         <Col md={{ span: 8 }}>
           <Card>
             <Card.Body>
-              {typeNumber === 1 ? (
-                <UserUpdate />
-              ) : (
+              {pathname.includes("Boards") ? (
                 <UserBoardList
-                  boards={typeNumber === 3 ? usedGoodsBoards : communityBoards}
+                  boards={
+                    pathname.includes("used")
+                      ? usedGoodsBoards
+                      : communityBoards
+                  }
                 />
+              ) : (
+                <UserUpdate />
               )}
             </Card.Body>
           </Card>

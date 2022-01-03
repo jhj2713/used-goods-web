@@ -95,6 +95,18 @@ function App() {
           }
         />
         <Route
+          path="/mypage/usedBoards"
+          element={
+            user === null ? <Navigate replace to="/login" /> : <Mypage />
+          }
+        />
+        <Route
+          path="/mypage/communityBoards"
+          element={
+            user === null ? <Navigate replace to="/login" /> : <Mypage />
+          }
+        />
+        <Route
           path="*"
           element={
             user === null ? (
