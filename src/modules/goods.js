@@ -1,39 +1,39 @@
 import { handleActions } from "redux-actions";
-import * as comAPI from "../lib/api/community";
+import * as goodsAPI from "../lib/api/goods";
 import createRequestThunk, {
   createRequestActionTypes,
 } from "../lib/createRequestThunk";
 
 const [LOAD, LOAD_SUCCESS, LOAD_FAILURE] =
-  createRequestActionTypes("community/LOAD");
+  createRequestActionTypes("goods/LOAD");
 const [SAVE, SAVE_SUCCESS, SAVE_FAILURE] =
-  createRequestActionTypes("community/SAVE");
+  createRequestActionTypes("goods/SAVE");
 const [UPDATE, UPDATE_SUCCESS, UPDATE_FAILURE] =
-  createRequestActionTypes("community/UPDATE");
+  createRequestActionTypes("goods/UPDATE");
 const [DELETE, DELETE_SUCCESS, DELETE_FAILURE] =
-  createRequestActionTypes("community/DELETE");
+  createRequestActionTypes("goods/DELETE");
 
-export const loadBoards = createRequestThunk(LOAD, comAPI.loadBoards);
-export const saveBoard = createRequestThunk(SAVE, comAPI.saveBoard);
-export const updateBoard = createRequestThunk(UPDATE, comAPI.updateBoard);
-export const deleteBoard = createRequestThunk(DELETE, comAPI.deleteBoard);
+export const loadGoods = createRequestThunk(LOAD, goodsAPI.loadGoods);
+export const saveGoods = createRequestThunk(SAVE, goodsAPI.saveGoods);
+export const updateGoods = createRequestThunk(UPDATE, goodsAPI.updateGoods);
+export const deleteGoods = createRequestThunk(DELETE, goodsAPI.deleteGoods);
 
 const initialState = {
-  boards: null,
+  goodsBoards: null,
   save: null,
   deleteBoard: null,
 };
 
 export default handleActions(
   {
-    [LOAD_SUCCESS]: (state, { payload: boards }) => ({
+    [LOAD_SUCCESS]: (state, { payload: goodsBoards }) => ({
       ...state,
-      boards,
+      goodsBoards,
       error: null,
     }),
     [LOAD_FAILURE]: (state, { payload: error }) => ({
       ...state,
-      boards: null,
+      goodsBoards: null,
       error,
     }),
     [SAVE_SUCCESS]: (state, { payload: save }) => ({

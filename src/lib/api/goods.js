@@ -1,24 +1,24 @@
 import { firestore } from "../../firebase";
 
-export const saveBoard = (board) => {
-  firestore.collection("community").add(board);
+export const saveGoods = (board) => {
+  firestore.collection("goods").add(board);
 };
 
-export const updateBoard = (board) => {
+export const updateGoods = (board) => {
   firestore
-    .collection("community")
+    .collection("goods")
     .where("id", "==", board.id)
     .get()
     .then((res) => {
       const uid = res.docs[0].id;
-      firestore.collection("community").doc(uid).update(board);
+      firestore.collection("goods").doc(uid).update(board);
     });
 };
 
-export const loadBoards = () => {
+export const loadGoods = () => {
   let boards = [];
   return firestore
-    .collection("community")
+    .collection("goods")
     .orderBy("date")
     .limit(7)
     .get()
@@ -30,13 +30,13 @@ export const loadBoards = () => {
     });
 };
 
-export const deleteBoard = (board) => {
+export const deleteGoods = (board) => {
   firestore
-    .collection("community")
+    .collection("goods")
     .where("id", "==", board.id)
     .get()
     .then((res) => {
       const uid = res.docs[0].id;
-      firestore.collection("community").doc(uid).delete();
+      firestore.collection("goods").doc(uid).delete();
     });
 };

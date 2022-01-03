@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Button, ListGroup } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { load } from "../../modules/community";
+import { loadBoards } from "../../modules/community";
 import Pagination from "../../components/Pagination";
 import Search from "../../components/Search";
 import styled from "styled-components";
@@ -60,7 +60,7 @@ function Community() {
   };
 
   useEffect(() => {
-    dispatch(load()).then(() => {
+    dispatch(loadBoards()).then(() => {
       setListItem(boards);
     });
   }, []);

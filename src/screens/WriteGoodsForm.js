@@ -2,10 +2,10 @@ import { useState, useEffect } from "react";
 import ReactQuill from "react-quill";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { saveBoard, updateBoard } from "../modules/community";
 import { Button, FormControl } from "react-bootstrap";
 import styled from "styled-components";
 import "react-quill/dist/quill.snow.css";
+import { saveGoods, updateGoods } from "../modules/goods";
 
 const modules = {
   toolbar: [
@@ -49,13 +49,13 @@ const ButtonBox = styled.div`
   justify-content: flex-end;
 `;
 
-function WriteForm() {
+function WriteGoodsForm() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const dispatch = useDispatch();
-  const { username, boards } = useSelector(({ user, community }) => ({
+  const { username, boards } = useSelector(({ user, goods }) => ({
     username: user.user.displayName,
-    boards: community.boards,
+    boards: goods.goodsBoards,
   }));
 
   const [value, setValue] = useState("");
@@ -76,8 +76,8 @@ function WriteForm() {
         date: new Date(),
         id: Number(pathname.split("/")[2]),
       };
-      dispatch(updateBoard(board)).then(() => {
-        navigate("/boardDetail/" + board.id);
+      dispatch(updateGoods(board)).then(() => {
+        navigate("/goodsDetail/" + board.id);
       });
     } else {
       const board = {
@@ -87,8 +87,8 @@ function WriteForm() {
         date: new Date(),
         id: Date.parse(new Date()),
       };
-      dispatch(saveBoard(board)).then(() => {
-        navigate("/community", { replace: true });
+      dispatch(saveGoods(board)).then(() => {
+        navigate("/usedGoods", { replace: true });
       });
     }
   };
@@ -141,4 +141,4 @@ function WriteForm() {
   );
 }
 
-export default WriteForm;
+export default WriteGoodsForm;

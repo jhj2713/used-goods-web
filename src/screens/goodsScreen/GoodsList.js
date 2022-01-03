@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Row, Col, Card, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { loadGoods } from "../../modules/goods";
 import Pagination from "../../components/Pagination";
 import styled from "styled-components";
 import Search from "../../components/Search";
@@ -29,14 +31,12 @@ const ButtonBox = styled.div`
 
 function GoodsList() {
   const navigate = useNavigate();
-  const [goods, setGoods] = useState([
-    { id: 1, src: "", title: "제목", summary: "요약문" },
-    { id: 2, src: "", title: "제목", summary: "요약문" },
-    { id: 3, src: "", title: "제목", summary: "요약문" },
-    { id: 4, src: "", title: "제목", summary: "요약문" },
-    { id: 5, src: "", title: "제목", summary: "요약문" },
-    { id: 6, src: "", title: "제목", summary: "요약문" },
-  ]);
+  const dispatch = useDispatch();
+  const { goodsBoards } = useSelector(({ goods }) => ({
+    goodsBoards: goods.goodsBoards,
+  }));
+
+  const [goods, setGoods] = useState([]);
   const [page, setPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
 
@@ -49,6 +49,12 @@ function GoodsList() {
   const _handleSearch = () => {
     console.log(searchValue);
   };
+
+  useEffect(() => {
+    dispatch(loadGoods()).then(() => {
+      setGoods(goodsBoards);
+    });
+  }, []);
 
   return (
     <Container>
@@ -64,13 +70,12 @@ function GoodsList() {
           <Col key={item.id}>
             <StyledCard
               onClick={() => {
-                navigate("/boardDetail");
+                navigate("/goodsDetail/" + item.id);
               }}
             >
               <Card.Img variant="top" src="/image.png" />
               <Card.Body>
                 <Card.Title>{item.title}</Card.Title>
-                <Card.Text>{item.summary}</Card.Text>
               </Card.Body>
             </StyledCard>
           </Col>
