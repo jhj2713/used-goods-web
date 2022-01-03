@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button, ListGroup } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { load } from "../../modules/community";
 import Pagination from "../../components/Pagination";
 import Search from "../../components/Search";
 import styled from "styled-components";
@@ -38,16 +40,12 @@ const ButtonBox = styled.div`
 
 function Community() {
   const navigate = useNavigate();
-  const [listItem, setListItem] = useState([
-    { id: 1, title: "제목", user: "유저명" },
-    { id: 2, title: "제목", user: "유저명" },
-    { id: 3, title: "제목", user: "유저명" },
-    { id: 4, title: "제목", user: "유저명" },
-    { id: 5, title: "제목", user: "유저명" },
-    { id: 6, title: "제목", user: "유저명" },
-    { id: 7, title: "제목", user: "유저명" },
-    { id: 8, title: "제목", user: "유저명" },
-  ]);
+  const dispatch = useDispatch();
+  const { boards } = useSelector(({ community }) => ({
+    boards: community.boards,
+  }));
+
+  const [listItem, setListItem] = useState([]);
   const [page, setPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
 
@@ -61,6 +59,12 @@ function Community() {
     console.log(searchValue);
   };
 
+  useEffect(() => {
+    dispatch(load()).then(() => {
+      setListItem(boards);
+    });
+  }, []);
+
   return (
     <Container>
       <SearchBox>
@@ -72,7 +76,7 @@ function Community() {
       </SearchBox>
       <ListGroup variant="flush">
         {listItem.map((item) => (
-          <ListGroup.Item key={item.id}>
+          <ListGroup.Item key={item.userId}>
             <StyledTitle
               style={{ float: "left" }}
               onClick={() => navigate("/boarddetail")}
