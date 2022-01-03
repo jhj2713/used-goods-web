@@ -9,18 +9,14 @@ const StyledPage = styled.p`
   margin: 5px;
 `;
 
-function Pagination({ page, lastPage, clickPrev, clickNext }) {
+function Pagination({ page, isLast, clickPrev, clickNext }) {
   return (
     <Container>
       <Button variant="secondary" disabled={page === 1} onClick={clickPrev}>
         Prev
       </Button>
       <StyledPage>{page}</StyledPage>
-      <Button
-        variant="secondary"
-        disabled={page === lastPage}
-        onClick={clickNext}
-      >
+      <Button variant="secondary" disabled={isLast} onClick={clickNext}>
         Next
       </Button>
     </Container>

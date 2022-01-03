@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Button, ListGroup } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { loadBoards } from "../../modules/community";
+import { loadBoards, paginationNextBoard } from "../../modules/community";
 import Pagination from "../../components/Pagination";
 import Search from "../../components/Search";
 import styled from "styled-components";
@@ -41,8 +41,10 @@ const ButtonBox = styled.div`
 function Community() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { boards } = useSelector(({ community }) => ({
+  const { boards, isLast, lastDoc } = useSelector(({ community }) => ({
     boards: community.boards,
+    isLast: community.isLast,
+    lastDoc: community.lastDoc,
   }));
 
   const [listItem, setListItem] = useState([]);
@@ -60,10 +62,15 @@ function Community() {
   };
 
   useEffect(() => {
-    dispatch(loadBoards()).then(() => {
-      setListItem(boards);
-    });
-  }, []);
+    if (lastDoc) {
+      dispatch(paginationNextBoard({ lastDoc }));
+    } else {
+      dispatch(loadBoards());
+    }
+  }, [page]);
+  useEffect(() => {
+    setListItem(boards);
+  }, [boards]);
 
   return (
     <Container>
@@ -90,7 +97,7 @@ function Community() {
       <PageContainer>
         <Pagination
           page={page}
-          lastPage={10}
+          isLast={isLast}
           clickPrev={_handlePrev}
           clickNext={_handleNext}
         />

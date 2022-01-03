@@ -16,17 +16,38 @@ export const updateBoard = (board) => {
 };
 
 export const loadBoards = () => {
-  let boards = [];
   return firestore
     .collection("community")
-    .orderBy("date")
+    .orderBy("date", "desc")
     .limit(7)
     .get()
     .then((res) => {
-      res.docs.forEach((doc) => {
-        boards.push(doc.data());
-      });
-      return boards;
+      const boards = res.docs.map((doc) => doc.data());
+      const lastDoc = res.docs[res.docs.length - 1];
+      let isLast = false;
+      console.log(res);
+      if (res.size < 7) {
+        isLast = true;
+      }
+      return { boards, lastDoc, isLast };
+    });
+};
+
+export const paginationNextBoard = ({ lastDoc }) => {
+  return firestore
+    .collection("community")
+    .orderBy("date", "desc")
+    .startAfter(lastDoc)
+    .limit(7)
+    .get()
+    .then((res) => {
+      const boards = res.docs.map((doc) => doc.data());
+      const lastDoc = res.docs[res.docs.length - 1];
+      let isLast = false;
+      if (res.size < 7) {
+        isLast = true;
+      }
+      return { boards, lastDoc, isLast };
     });
 };
 
