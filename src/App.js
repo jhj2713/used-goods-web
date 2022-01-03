@@ -18,7 +18,8 @@ function App() {
         <Route path="/usedGoods" element={<GoodsList />} />
         <Route path="/community" element={<Community />} />
         <Route path="/boardDetail" element={<BoardDetail />} />
-        <Route path="/writeBoard" element={<WriteForm />} />
+        <Route path="/writeCommunityBoard" element={<WriteForm />} />
+        <Route path="/writeGoodsBoard" element={<WriteForm />} />
         <Route path="/updateBoard" element={<WriteForm />} />
         <Route path="/mypage" element={<Mypage />} />
       </Routes>

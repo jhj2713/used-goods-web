@@ -86,7 +86,7 @@ function GoodsList() {
         <ButtonBox>
           <Button
             variant="outline-secondary"
-            onClick={() => navigate("/writeBoard")}
+            onClick={() => navigate("/writeGoodsBoard")}
           >
             +
           </Button>

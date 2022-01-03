@@ -93,7 +93,7 @@ function Community() {
         <ButtonBox>
           <Button
             variant="outline-secondary"
-            onClick={() => navigate("/writeBoard")}
+            onClick={() => navigate("/writeCommunityBoard")}
           >
             +
           </Button>

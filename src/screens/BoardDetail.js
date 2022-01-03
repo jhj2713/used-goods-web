@@ -40,7 +40,7 @@ function BoardDetail() {
   ]);
 
   const _handleUpdate = () => {
-    navigate("/updateBoard", { board: { title: "제목", content: "내용" } });
+    navigate("/updateBoard");
   };
 
   return (
