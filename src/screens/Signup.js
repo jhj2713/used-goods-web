@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { FloatingLabel, Form, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { signup, checkEmail } from "../modules/user";
+import { signup, checkName } from "../modules/user";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -22,6 +22,9 @@ const ErrorMsg = styled.p`
 function Signup() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { doubleCheck } = useSelector(({ user }) => ({
+    doubleCheck: user.doubleCheck,
+  }));
 
   const [user, setUser] = useState({ email: "", username: "", password: "" });
   const [passwordConfirm, setPasswordConfirm] = useState("");
@@ -41,6 +44,8 @@ function Signup() {
       setErrorMsg("비밀번호를 6자 이상 입력해주세요");
     } else if (user.password !== passwordConfirm) {
       setErrorMsg("비밀번호가 일치하지 않습니다");
+    } else if (!checked) {
+      setErrorMsg("이름을 다시 입력해주세요");
     } else {
       setErrorMsg("");
       dispatch(signup(user))
@@ -55,6 +60,21 @@ function Signup() {
   const _handlePwdConfirm = (e) => {
     setPasswordConfirm(e.target.value);
   };
+
+  useEffect(() => {
+    if (user.username) {
+      if (doubleCheck) {
+        setErrorMsg("");
+        setChecked(true);
+      } else {
+        setErrorMsg("이미 존재하는 이름입니다");
+        setChecked(false);
+      }
+    }
+  }, [doubleCheck, user.username]);
+  useEffect(() => {
+    dispatch(checkName(user));
+  }, [user.username]);
 
   return (
     <Container>

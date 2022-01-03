@@ -1,4 +1,4 @@
-import "../../firebase";
+import { firestore } from "../../firebase";
 import {
   createUserWithEmailAndPassword,
   getAuth,
@@ -17,9 +17,24 @@ export const login = (user) => {
   );
 };
 
+export const checkName = (user) => {
+  return firestore
+    .collection("user")
+    .where("username", "==", user.username)
+    .get()
+    .then((res) => {
+      if (res.docs.length > 0) {
+        return false;
+      } else {
+        return true;
+      }
+    });
+};
+
 export const signup = (user) => {
   return createUserWithEmailAndPassword(auth, user.email, user.password).then(
     () => {
+      firestore.collection("user").add(user);
       updateProfile(auth.currentUser, { displayName: user.username });
       return true;
     },
