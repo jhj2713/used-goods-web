@@ -22,6 +22,8 @@ const [
   PAGINATION_PREV_BOARD_SUCCESS,
   PAGINATION_PREV_BOARD_FAILURE,
 ] = createRequestActionTypes("community/PAGINATION_PREV_BOARD");
+const [LOAD_WRITE_LIST, LOAD_WRITE_LIST_SUCCESS, LOAD_WRITE_LIST_FAILURE] =
+  createRequestActionTypes("community/LOAT_WRITE_LIST");
 
 export const loadBoards = createRequestThunk(LOAD, comAPI.loadBoards);
 export const saveBoard = createRequestThunk(SAVE, comAPI.saveBoard);
@@ -34,6 +36,10 @@ export const paginationNextBoard = createRequestThunk(
 export const paginationPrevBoard = createRequestThunk(
   PAGINATION_PREV_BOARD,
   comAPI.paginationPrevBoard,
+);
+export const loadWriteList = createRequestThunk(
+  LOAD_WRITE_LIST,
+  comAPI.loadMyWriteList,
 );
 
 const initialState = {
@@ -116,6 +122,16 @@ export default handleActions(
       boards: null,
       lastDoc: null,
       isLast: null,
+      error,
+    }),
+    [LOAD_WRITE_LIST_SUCCESS]: (state, { payload: boards }) => ({
+      ...state,
+      boards,
+      error: null,
+    }),
+    [LOAD_WRITE_LIST_FAILURE]: (state, { payload: error }) => ({
+      ...state,
+      boards: null,
       error,
     }),
   },

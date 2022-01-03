@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { ListGroup } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import Pagination from "../components/Pagination";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -21,22 +20,11 @@ const StyledUser = styled.p`
   margin-right: 10px;
   font-size: 17px;
 `;
-const PageContainer = styled.div`
-  display: flex;
-  justify-content: center;
-`;
 
 function UserBoardList({ boards }) {
   const navigate = useNavigate();
   const [listItem, setListItem] = useState([]);
-  const [page, setPage] = useState(1);
 
-  const _handlePrev = () => {
-    setPage((page) => page - 1);
-  };
-  const _handleNext = () => {
-    setPage((page) => page + 1);
-  };
   const _handleClick = () => {
     navigate("/boardDetail");
   };
@@ -48,23 +36,16 @@ function UserBoardList({ boards }) {
   return (
     <Container>
       <ListGroup variant="flush">
-        {listItem.map((item) => (
-          <ListGroup.Item key={item.id}>
-            <StyledTitle style={{ float: "left" }} onClick={_handleClick}>
-              {item.title}
-            </StyledTitle>
-            <StyledUser style={{ float: "right" }}>{item.user}</StyledUser>
-          </ListGroup.Item>
-        ))}
+        {listItem &&
+          listItem.map((item) => (
+            <ListGroup.Item key={item.id}>
+              <StyledTitle style={{ float: "left" }} onClick={_handleClick}>
+                {item.title}
+              </StyledTitle>
+              <StyledUser style={{ float: "right" }}>{item.user}</StyledUser>
+            </ListGroup.Item>
+          ))}
       </ListGroup>
-      <PageContainer>
-        <Pagination
-          page={page}
-          lastPage={10}
-          clickPrev={_handlePrev}
-          clickNext={_handleNext}
-        />
-      </PageContainer>
     </Container>
   );
 }

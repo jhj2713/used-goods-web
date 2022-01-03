@@ -22,6 +22,8 @@ const [
   PAGINATION_PREV_BOARD_SUCCESS,
   PAGINATION_PREV_BOARD_FAILURE,
 ] = createRequestActionTypes("goods/PAGINATION_PREV_BOARD");
+const [LOAD_WRITE_GOODS, LOAD_WRITE_GOODS_SUCCESS, LOAD_WRITE_GOODS_FAILURE] =
+  createRequestActionTypes("goods/LOAT_WRITE_GOODS");
 
 export const loadGoods = createRequestThunk(LOAD, goodsAPI.loadGoods);
 export const saveGoods = createRequestThunk(SAVE, goodsAPI.saveGoods);
@@ -34,6 +36,10 @@ export const paginationNextBoard = createRequestThunk(
 export const paginationPrevBoard = createRequestThunk(
   PAGINATION_PREV_BOARD,
   goodsAPI.paginationPrevBoard,
+);
+export const loadWriteGoods = createRequestThunk(
+  LOAD_WRITE_GOODS,
+  goodsAPI.loadMyGoodsList,
 );
 
 const initialState = {
@@ -116,6 +122,16 @@ export default handleActions(
       boards: null,
       lastDoc: null,
       isLast: null,
+      error,
+    }),
+    [LOAD_WRITE_GOODS_SUCCESS]: (state, { payload: goodsBoards }) => ({
+      ...state,
+      goodsBoards,
+      error: null,
+    }),
+    [LOAD_WRITE_GOODS_FAILURE]: (state, { payload: error }) => ({
+      ...state,
+      goodsBoards: null,
       error,
     }),
   },

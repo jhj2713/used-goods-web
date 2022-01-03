@@ -3,6 +3,7 @@ import { Row, Col, Card, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../modules/user";
+import { loadWriteList } from "../modules/community";
 import UserUpdate from "../components/UserUpdate";
 import UserBoardList from "../components/UserBoardList";
 import styled from "styled-components";
@@ -34,24 +35,18 @@ const StyledButton = styled(Button)`
 function Mypage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { user } = useSelector(({ user }) => ({
-    user: user.user,
-  }));
+  const { user, communityBoards, usedGoodsBoards } = useSelector(
+    ({ user, community, goods }) => ({
+      user: user.user,
+      communityBoards: community.boards,
+      usedGoodsBoards: goods.goodsBoards,
+    }),
+  );
 
   const [typeNumber, setTypeNumber] = useState(1);
-  const [boards, setBoards] = useState([]);
 
   useEffect(() => {
-    setBoards([
-      { id: 1, title: "제목", user: "유저명" },
-      { id: 2, title: "제목", user: "유저명" },
-      { id: 3, title: "제목", user: "유저명" },
-      { id: 4, title: "제목", user: "유저명" },
-      { id: 5, title: "제목", user: "유저명" },
-      { id: 6, title: "제목", user: "유저명" },
-      { id: 7, title: "제목", user: "유저명" },
-      { id: 8, title: "제목", user: "유저명" },
-    ]);
+    dispatch(loadWriteList(user));
   }, []);
 
   const _handleLogout = () => {
@@ -78,8 +73,8 @@ function Mypage() {
                   style={{ cursor: "pointer" }}
                   onClick={() => setTypeNumber(2)}
                 >
-                  <p>작성한 글</p>
-                  <p>0</p>
+                  <p>중고거래 글</p>
+                  <p>{usedGoodsBoards.length}</p>
                 </div>
               </StyledCol>
               <StyledCol>
@@ -87,8 +82,8 @@ function Mypage() {
                   style={{ cursor: "pointer" }}
                   onClick={() => setTypeNumber(3)}
                 >
-                  <p>좋아한 글</p>
-                  <p>0</p>
+                  <p>커뮤니티 글</p>
+                  <p>{communityBoards.length}</p>
                 </div>
               </StyledCol>
             </Row>
@@ -100,7 +95,9 @@ function Mypage() {
               {typeNumber === 1 ? (
                 <UserUpdate />
               ) : (
-                <UserBoardList boards={boards} />
+                <UserBoardList
+                  boards={typeNumber === 3 ? usedGoodsBoards : communityBoards}
+                />
               )}
             </Card.Body>
           </Card>

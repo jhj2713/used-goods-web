@@ -78,3 +78,13 @@ export const deleteGoods = (board) => {
       firestore.collection("goods").doc(uid).delete();
     });
 };
+
+export const loadMyGoodsList = (user) => {
+  return firestore
+    .collection("goods")
+    .where("userId", "==", user.displayName)
+    .get()
+    .then((res) => {
+      return res.docs.map((doc) => doc.data());
+    });
+};
