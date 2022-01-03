@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import ReactQuill from "react-quill";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { save } from "../modules/community";
+import { save, update } from "../modules/community";
 import { Button, FormControl } from "react-bootstrap";
 import styled from "styled-components";
 import "react-quill/dist/quill.snow.css";
@@ -68,16 +68,29 @@ function WriteForm() {
     setValue(value);
   };
   const _handleSubmit = () => {
-    const board = {
-      title: title,
-      content: value,
-      userId: username,
-      date: new Date(),
-      id: Date.parse(new Date()),
-    };
-    dispatch(save(board)).then(() => {
-      navigate("/community", { replace: true });
-    });
+    if (pathname.includes("update")) {
+      const board = {
+        title: title,
+        content: value,
+        userId: username,
+        date: new Date(),
+        id: Number(pathname.split("/")[2]),
+      };
+      dispatch(update(board)).then(() => {
+        navigate("/boardDetail/" + board.id);
+      });
+    } else {
+      const board = {
+        title: title,
+        content: value,
+        userId: username,
+        date: new Date(),
+        id: Date.parse(new Date()),
+      };
+      dispatch(save(board)).then(() => {
+        navigate("/community", { replace: true });
+      });
+    }
   };
 
   useEffect(() => {
