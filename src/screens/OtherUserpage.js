@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Row, Col, Card, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
-import { logout } from "../modules/user";
+import { logout, loadUser } from "../modules/user";
 import { loadWriteList } from "../modules/community";
 import { loadWriteGoods } from "../modules/goods";
 import UserUpdate from "../components/UserUpdate";
@@ -25,36 +25,29 @@ const StyledCol = styled(Col)`
   justify-content: center;
   text-align: center;
 `;
-const StyledButton = styled(Button)`
-  text-decoration: none;
-  color: lightgray;
-  :hover {
-    color: gray;
-  }
-`;
 
-function Mypage() {
+function OtherUserpage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
-  const { user, communityBoards, usedGoodsBoards } = useSelector(
+  const { otherUser, communityBoards, usedGoodsBoards } = useSelector(
     ({ user, community, goods }) => ({
-      user: user.user,
+      otherUser: user.otherUser,
       communityBoards: community.boards,
       usedGoodsBoards: goods.goodsBoards,
     }),
   );
 
   useEffect(() => {
-    dispatch(loadWriteList({ user: user.displayName }));
-    dispatch(loadWriteGoods({ user: user.displayName }));
-  }, []);
-
-  const _handleLogout = () => {
-    dispatch(logout());
-    navigate("/login");
-  };
+    dispatch(loadUser({ username: pathname.split("/")[2] }));
+  });
+  useEffect(() => {
+    if (otherUser) {
+      dispatch(loadWriteList({ user: otherUser.username }));
+      dispatch(loadWriteGoods({ user: otherUser.username }));
+    }
+  }, [otherUser]);
 
   return (
     <Container>
@@ -64,36 +57,37 @@ function Mypage() {
             <CardBox>
               <StyledUser
                 onClick={() => {
-                  navigate("/mypage");
+                  navigate("/otheruser/" + otherUser.username);
                 }}
               >
-                {user.displayName}
+                {otherUser && otherUser.username}
               </StyledUser>
-              <StyledButton variant="link" onClick={_handleLogout}>
-                로그아웃
-              </StyledButton>
             </CardBox>
             <Row>
               <StyledCol>
                 <div
                   style={{ cursor: "pointer" }}
                   onClick={() => {
-                    navigate("/mypage/usedBoards");
+                    navigate(
+                      "/otheruser/" + otherUser.username + "/usedBoards",
+                    );
                   }}
                 >
                   <p>중고거래 글</p>
-                  <p>{usedGoodsBoards.length}</p>
+                  <p>{usedGoodsBoards && usedGoodsBoards.length}</p>
                 </div>
               </StyledCol>
               <StyledCol>
                 <div
                   style={{ cursor: "pointer" }}
                   onClick={() => {
-                    navigate("/mypage/communityBoards");
+                    navigate(
+                      "/otheruser/" + otherUser.username + "/communityBoards",
+                    );
                   }}
                 >
                   <p>커뮤니티 글</p>
-                  <p>{communityBoards.length}</p>
+                  <p>{communityBoards && communityBoards.length}</p>
                 </div>
               </StyledCol>
             </Row>
@@ -121,4 +115,4 @@ function Mypage() {
   );
 }
 
-export default Mypage;
+export default OtherUserpage;

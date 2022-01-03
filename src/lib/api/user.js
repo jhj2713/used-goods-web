@@ -44,3 +44,13 @@ export const signup = (user) => {
 export const logout = () => {
   return signOut(auth);
 };
+
+export const loadUser = ({ username }) => {
+  return firestore
+    .collection("user")
+    .where("username", "==", username)
+    .get()
+    .then((res) => {
+      return res.docs[0].data();
+    });
+};

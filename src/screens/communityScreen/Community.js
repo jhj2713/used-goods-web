@@ -27,6 +27,7 @@ const StyledUser = styled.p`
   margin-top: 10px;
   margin-right: 10px;
   font-size: 17px;
+  cursor: pointer;
 `;
 const PageContainer = styled.div`
   display: flex;
@@ -92,7 +93,12 @@ function Community() {
             >
               {item.title}
             </StyledTitle>
-            <StyledUser style={{ float: "right" }}>{item.userId}</StyledUser>
+            <StyledUser
+              style={{ float: "right" }}
+              onClick={() => navigate("/otheruser/" + item.userId)}
+            >
+              {item.userId}
+            </StyledUser>
           </ListGroup.Item>
         ))}
       </ListGroup>

@@ -79,10 +79,10 @@ export const deleteBoard = (board) => {
     });
 };
 
-export const loadMyWriteList = (user) => {
+export const loadMyWriteList = ({ user }) => {
   return firestore
     .collection("community")
-    .where("userId", "==", user.displayName)
+    .where("userId", "==", user)
     .get()
     .then((res) => {
       return res.docs.map((doc) => doc.data());

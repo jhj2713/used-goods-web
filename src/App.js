@@ -10,6 +10,7 @@ import GoodsDetail from "./screens/GoodsDetail";
 import WriteForm from "./screens/WriteForm";
 import Mypage from "./screens/Mypage";
 import WriteGoodsForm from "./screens/WriteGoodsForm";
+import OtherUserpage from "./screens/OtherUserpage";
 
 function App() {
   const { user } = useSelector(({ user }) => ({
@@ -104,6 +105,24 @@ function App() {
           path="/mypage/communityBoards"
           element={
             user === null ? <Navigate replace to="/login" /> : <Mypage />
+          }
+        />
+        <Route
+          path="/otheruser/:id"
+          element={
+            user === null ? <Navigate replace to="/login" /> : <OtherUserpage />
+          }
+        />
+        <Route
+          path="/otheruser/:id/communityBoards"
+          element={
+            user === null ? <Navigate replace to="/login" /> : <OtherUserpage />
+          }
+        />
+        <Route
+          path="/otheruser/:id/usedBoards"
+          element={
+            user === null ? <Navigate replace to="/login" /> : <OtherUserpage />
           }
         />
         <Route

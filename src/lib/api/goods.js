@@ -79,10 +79,10 @@ export const deleteGoods = (board) => {
     });
 };
 
-export const loadMyGoodsList = (user) => {
+export const loadMyGoodsList = ({ user }) => {
   return firestore
     .collection("goods")
-    .where("userId", "==", user.displayName)
+    .where("userId", "==", user)
     .get()
     .then((res) => {
       return res.docs.map((doc) => doc.data());
