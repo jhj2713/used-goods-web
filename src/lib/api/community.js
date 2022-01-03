@@ -18,3 +18,14 @@ export const load = () => {
       return boards;
     });
 };
+
+export const deleteBoard = (board) => {
+  firestore
+    .collection("community")
+    .where("id", "==", board.id)
+    .get()
+    .then((res) => {
+      const uid = res.docs[0].id;
+      firestore.collection("community").doc(uid).delete();
+    });
+};

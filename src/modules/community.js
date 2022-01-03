@@ -8,13 +8,17 @@ const [LOAD, LOAD_SUCCESS, LOAD_FAILURE] =
   createRequestActionTypes("community/LOAD");
 const [SAVE, SAVE_SUCCESS, SAVE_FAILURE] =
   createRequestActionTypes("community/SAVE");
+const [DELETE, DELETE_SUCCESS, DELETE_FAILURE] =
+  createRequestActionTypes("community/DELETE");
 
 export const load = createRequestThunk(LOAD, comAPI.load);
 export const save = createRequestThunk(SAVE, comAPI.save);
+export const deleteBoard = createRequestThunk(DELETE, comAPI.deleteBoard);
 
 const initialState = {
   boards: null,
   save: null,
+  deleteBoard: null,
 };
 
 export default handleActions(
@@ -37,6 +41,16 @@ export default handleActions(
     [SAVE_FAILURE]: (state, { payload: error }) => ({
       ...state,
       save: null,
+      error,
+    }),
+    [DELETE_SUCCESS]: (state, { payload: deleteBoard }) => ({
+      ...state,
+      deleteBoard,
+      error: null,
+    }),
+    [DELETE_FAILURE]: (state, { payload: error }) => ({
+      ...state,
+      delete: null,
       error,
     }),
   },

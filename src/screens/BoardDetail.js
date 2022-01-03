@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Button } from "react-bootstrap";
 import Comments from "../components/Comments";
-import { useSelector } from "react-redux";
+import { deleteBoard } from "../modules/community";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const Container = styled.div`
@@ -39,6 +40,7 @@ const ButtonBox = styled.div`
 
 function BoardDetail() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { pathname } = useLocation();
   const { boards } = useSelector(({ community }) => ({
     boards: community.boards,
@@ -57,6 +59,11 @@ function BoardDetail() {
 
   const _handleUpdate = () => {
     navigate("/updateBoard/" + boardId);
+  };
+  const _handleDelete = () => {
+    dispatch(deleteBoard(board)).then(() => {
+      navigate("/community");
+    });
   };
 
   useEffect(() => {
@@ -81,7 +88,7 @@ function BoardDetail() {
           <Button variant="outline-secondary" size="sm" onClick={_handleUpdate}>
             수정하기
           </Button>
-          <Button variant="outline-danger" size="sm">
+          <Button variant="outline-danger" size="sm" onClick={_handleDelete}>
             삭제하기
           </Button>
         </ButtonBox>

@@ -73,6 +73,7 @@ function WriteForm() {
       content: value,
       userId: username,
       date: new Date(),
+      id: Date.parse(new Date()),
     };
     dispatch(save(board)).then(() => {
       navigate("/community", { replace: true });
