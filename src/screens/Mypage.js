@@ -111,7 +111,7 @@ function Mypage() {
                   }
                 />
               ) : (
-                <UserUpdate />
+                <UserUpdate user={user} />
               )}
             </Card.Body>
           </Card>

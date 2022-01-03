@@ -28,6 +28,7 @@ const StyledTitle = styled.p`
 const StyledUser = styled.p`
   font-size: 15px;
   margin-top: 20px;
+  cursor: pointer;
 `;
 const StyledContent = styled.p`
   font-size: 20px;
@@ -81,7 +82,9 @@ function BoardDetail() {
       <StyledBoard>
         <TitleBox>
           <StyledTitle>{board.title}</StyledTitle>
-          <StyledUser>{board.userId}</StyledUser>
+          <StyledUser onClick={() => navigate("/otheruser/" + board.userId)}>
+            {board.userId}
+          </StyledUser>
         </TitleBox>
         <StyledContent
           dangerouslySetInnerHTML={{ __html: board.content }}

@@ -8,11 +8,7 @@ const Container = styled.div`
   width: 80%;
 `;
 
-function UserUpdate() {
-  const { user } = useSelector(({ user }) => ({
-    user: user.user,
-  }));
-
+function UserUpdate({ user }) {
   return (
     <Container>
       <Form>

@@ -41,7 +41,7 @@ function OtherUserpage() {
 
   useEffect(() => {
     dispatch(loadUser({ username: pathname.split("/")[2] }));
-  });
+  }, [pathname]);
   useEffect(() => {
     if (otherUser) {
       dispatch(loadWriteList({ user: otherUser.username }));
@@ -105,7 +105,12 @@ function OtherUserpage() {
                   }
                 />
               ) : (
-                <UserUpdate />
+                <UserUpdate
+                  user={{
+                    email: otherUser.email,
+                    displayName: otherUser.username,
+                  }}
+                />
               )}
             </Card.Body>
           </Card>
