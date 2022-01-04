@@ -5,6 +5,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
   updateProfile,
+  updatePassword,
 } from "firebase/auth";
 
 const auth = getAuth();
@@ -17,10 +18,10 @@ export const login = (user) => {
   );
 };
 
-export const checkName = (user) => {
+export const checkName = ({ username }) => {
   return firestore
     .collection("user")
-    .where("username", "==", user.username)
+    .where("username", "==", username)
     .get()
     .then((res) => {
       if (res.docs.length > 0) {
@@ -52,5 +53,14 @@ export const loadUser = ({ username }) => {
     .get()
     .then((res) => {
       return res.docs[0].data();
+    });
+};
+
+export const updateUser = (newUser) => {
+  const user = auth.currentUser;
+  return updatePassword(user, newUser.password)
+    .then(() => {})
+    .catch((err) => {
+      console.log(err);
     });
 };

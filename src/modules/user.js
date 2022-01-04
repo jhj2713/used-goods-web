@@ -12,12 +12,15 @@ const [CHECK_NAME, CHECK_NAME_SUCCESS, CHECK_NAME_FAILURE] =
   createRequestActionTypes("user/CHECK_NAME");
 const [LOAD_USER, LOAD_USER_SUCCESS, LOAD_USER_FAILURE] =
   createRequestActionTypes("user/LOAD_USER");
+const [UPDATE_USER, UPDATE_USER_SUCCESS, UPDATE_USER_FAILURE] =
+  createRequestActionTypes("user/UPDATE_USER");
 const LOGOUT = "user/LOGOUT";
 
 export const login = createRequestThunk(LOGIN, userAPI.login);
 export const signup = createRequestThunk(SIGNUP, userAPI.signup);
 export const checkName = createRequestThunk(CHECK_NAME, userAPI.checkName);
 export const loadUser = createRequestThunk(LOAD_USER, userAPI.loadUser);
+export const updateUser = createRequestThunk(UPDATE_USER, userAPI.updateUser);
 export const logout = createAction(LOGOUT);
 
 const initialState = {
@@ -67,6 +70,16 @@ export default handleActions(
     [LOAD_USER_FAILURE]: (state, { payload: error }) => ({
       ...state,
       otherUser: null,
+      error,
+    }),
+    [UPDATE_USER_SUCCESS]: (state, { payload: update }) => ({
+      ...state,
+      update,
+      error: null,
+    }),
+    [UPDATE_USER_FAILURE]: (state, { payload: error }) => ({
+      ...state,
+      update: null,
       error,
     }),
     [LOGOUT]: (state) => ({

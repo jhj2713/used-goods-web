@@ -1,13 +1,13 @@
-import { useState, useEffect } from "react";
-import { Row, Col, Card, Button } from "react-bootstrap";
+import { useEffect } from "react";
+import { Row, Col, Card } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
-import { logout, loadUser } from "../modules/user";
+import { loadUser } from "../modules/user";
 import { loadWriteList } from "../modules/community";
 import { loadWriteGoods } from "../modules/goods";
-import UserUpdate from "../components/UserUpdate";
 import UserBoardList from "../components/UserBoardList";
 import styled from "styled-components";
+import OtherUserDetail from "../components/OtherUserDetail";
 
 const Container = styled.div`
   margin: 100px;
@@ -105,7 +105,7 @@ function OtherUserpage() {
                   }
                 />
               ) : (
-                <UserUpdate
+                <OtherUserDetail
                   user={{
                     email: otherUser.email,
                     displayName: otherUser.username,

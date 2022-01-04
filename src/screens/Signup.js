@@ -73,7 +73,7 @@ function Signup() {
     }
   }, [doubleCheck, user.username]);
   useEffect(() => {
-    dispatch(checkName(user));
+    dispatch(checkName({ username: user.username }));
   }, [user.username]);
 
   return (
