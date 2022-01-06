@@ -66,7 +66,7 @@ function GoodsDetail() {
   };
   const _handleDelete = () => {
     dispatch(deleteGoods(board)).then(() => {
-      dispatch(loadGoods()).then(() => {
+      dispatch(loadGoods({ searchValue: "" })).then(() => {
         navigate("/usedGoods");
       });
     });
@@ -89,11 +89,13 @@ function GoodsDetail() {
   };
 
   useEffect(() => {
-    setBoard(
-      boards.find((item) => {
-        return item.id === boardId;
-      }),
-    );
+    if (boards) {
+      setBoard(
+        boards.find((item) => {
+          return item.id === boardId;
+        }),
+      );
+    }
     dispatch(loadComments({ boardId }));
   }, []);
 

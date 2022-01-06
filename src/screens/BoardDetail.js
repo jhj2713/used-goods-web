@@ -89,11 +89,13 @@ function BoardDetail() {
   };
 
   useEffect(() => {
-    setBoard(
-      boards.find((item) => {
-        return item.id === boardId;
-      }),
-    );
+    if (boards) {
+      setBoard(
+        boards.find((item) => {
+          return item.id === boardId;
+        }),
+      );
+    }
     dispatch(loadComments({ boardId }));
   }, []);
 

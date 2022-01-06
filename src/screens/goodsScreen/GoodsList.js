@@ -63,9 +63,11 @@ function GoodsList() {
     setGoods(goodsBoards);
   }, [goodsBoards]);
   useEffect(() => {
-    setGoods(goodsBoards.slice((page - 1) * 6, page * 6));
-    if (goodsBoards.length < 6 * page) {
-      setIsLast(true);
+    if (goodsBoards) {
+      setGoods(goodsBoards.slice((page - 1) * 6, page * 6));
+      if (goodsBoards.length < 6 * page) {
+        setIsLast(true);
+      }
     }
   }, [goodsBoards, page]);
 
