@@ -65,8 +65,10 @@ function GoodsList() {
   useEffect(() => {
     if (goodsBoards) {
       setGoods(goodsBoards.slice((page - 1) * 6, page * 6));
-      if (goodsBoards.length < 6 * page) {
+      if (goodsBoards.length <= 6 * page) {
         setIsLast(true);
+      } else {
+        setIsLast(false);
       }
     }
   }, [goodsBoards, page]);
