@@ -79,6 +79,7 @@ function GoodsDetail() {
       content: commentValue,
       userId: user.displayName,
       date: new Date(),
+      id: Date.parse(new Date()),
     };
     dispatch(
       saveComment({

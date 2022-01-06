@@ -102,3 +102,28 @@ export const loadComments = ({ boardId }) => {
         });
     });
 };
+
+export const deleteComment = ({ boardId, id }) => {
+  firestore
+    .collection("community")
+    .where("id", "==", boardId)
+    .get()
+    .then((res) => {
+      const uid = res.docs[0].id;
+      firestore
+        .collection("community")
+        .doc(uid)
+        .collection("comments")
+        .where("id", "==", id)
+        .get()
+        .then((res) => {
+          const commentId = res.docs[0].id;
+          firestore
+            .collection("community")
+            .doc(uid)
+            .collection("comments")
+            .doc(commentId)
+            .delete();
+        });
+    });
+};

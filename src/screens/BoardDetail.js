@@ -79,6 +79,7 @@ function BoardDetail() {
       content: commentValue,
       userId: user.displayName,
       date: new Date(),
+      id: Date.parse(new Date()),
     };
     dispatch(
       saveComment({
@@ -136,7 +137,7 @@ function BoardDetail() {
           </Button>
         </InputGroup>
       </CommentInputContainer>
-      <Comments comments={comments} />
+      <Comments board={board.id} comments={comments} />
     </Container>
   );
 }

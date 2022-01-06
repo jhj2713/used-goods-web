@@ -18,6 +18,8 @@ const [SAVE_COMMENT, SAVE_COMMENT_SUCCESS, SAVE_COMMENT_FAILURE] =
   createRequestActionTypes("community/SAVE_COMMENT");
 const [LOAD_COMMENTS, LOAD_COMMENTS_SUCCESS, LOAD_COMMENTS_FAILURE] =
   createRequestActionTypes("community/LOAD_COMMENTS");
+const [DELETE_COMMENT, DELETE_COMMENT_SUCCESS, DELETE_COMMENT_FAILURE] =
+  createRequestActionTypes("community/DELETE_COMMENT");
 
 export const loadBoards = createRequestThunk(LOAD, comAPI.loadBoards);
 export const saveBoard = createRequestThunk(SAVE, comAPI.saveBoard);
@@ -31,6 +33,10 @@ export const saveComment = createRequestThunk(SAVE_COMMENT, comAPI.saveComment);
 export const loadComments = createRequestThunk(
   LOAD_COMMENTS,
   comAPI.loadComments,
+);
+export const deleteComment = createRequestThunk(
+  DELETE_COMMENT,
+  comAPI.deleteComment,
 );
 
 const initialState = {
@@ -109,6 +115,15 @@ export default handleActions(
     [LOAD_COMMENTS_FAILURE]: (state, { payload: error }) => ({
       ...state,
       comments: null,
+      error,
+    }),
+    [DELETE_COMMENT_SUCCESS]: (state) => ({
+      ...state,
+      error: null,
+    }),
+    [DELETE_COMMENT_FAILURE]: (state, { payload: error }) => ({
+      ...state,
+      comment: null,
       error,
     }),
   },
