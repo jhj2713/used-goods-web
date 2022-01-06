@@ -51,6 +51,11 @@ function GoodsList() {
     dispatch(loadGoods({ searchValue }));
   };
 
+  const setImgTag = (item) => {
+    const content = item.content.split(`<img src="`)[1].split(`"`)[0];
+    return <Card.Img variant="top" src={content} />;
+  };
+
   useEffect(() => {
     dispatch(loadGoods({ searchValue }));
   }, []);
@@ -82,7 +87,11 @@ function GoodsList() {
                   navigate("/goodsDetail/" + item.id);
                 }}
               >
-                <Card.Img variant="top" src="/image.png" />
+                {item.content.includes("img") ? (
+                  setImgTag(item)
+                ) : (
+                  <Card.Img variant="top" src="/image.png" />
+                )}
                 <Card.Body>
                   <Card.Title>{item.title}</Card.Title>
                 </Card.Body>

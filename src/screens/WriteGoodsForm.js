@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import ReactQuill from "react-quill";
+import ReactQuill, { Quill } from "react-quill";
+import ImageResize from "@looop/quill-image-resize-module-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, FormControl } from "react-bootstrap";
@@ -7,6 +8,7 @@ import styled from "styled-components";
 import "react-quill/dist/quill.snow.css";
 import { saveGoods, updateGoods, loadGoods } from "../modules/goods";
 
+Quill.register("modules/ImageResize", ImageResize);
 const modules = {
   toolbar: [
     //[{ 'font': [] }],
@@ -22,6 +24,9 @@ const modules = {
     [{ align: [] }, { color: [] }, { background: [] }], // dropdown with defaults from theme
     ["clean"],
   ],
+  ImageResize: {
+    modules: ["Resize"],
+  },
 };
 const formats = [
   //'font',
@@ -60,6 +65,7 @@ function WriteGoodsForm() {
 
   const [value, setValue] = useState("");
   const [title, setTitle] = useState("");
+  const [date, setDate] = useState("");
 
   const _handleTitle = (e) => {
     setTitle(e.target.value);
@@ -73,7 +79,7 @@ function WriteGoodsForm() {
         title: title,
         content: value,
         userId: username,
-        date: new Date(),
+        date: date,
         id: Number(pathname.split("/")[2]),
       };
       dispatch(updateGoods(board)).then(() => {
@@ -105,6 +111,7 @@ function WriteGoodsForm() {
       });
       setTitle(board.title);
       setValue(board.content);
+      setDate(board.date);
     }
   }, []);
 
