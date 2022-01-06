@@ -77,7 +77,7 @@ function WriteForm() {
         id: Number(pathname.split("/")[2]),
       };
       dispatch(updateBoard(board)).then(() => {
-        dispatch(loadBoards()).then(() => {
+        dispatch(loadBoards({ searchValue: "" })).then(() => {
           navigate("/boardDetail/" + board.id);
         });
       });
@@ -90,7 +90,7 @@ function WriteForm() {
         id: Date.parse(new Date()),
       };
       dispatch(saveBoard(board)).then(() => {
-        dispatch(loadBoards()).then(() => {
+        dispatch(loadBoards({ searchValue: "" })).then(() => {
           navigate("/community", { replace: true });
         });
       });

@@ -77,7 +77,7 @@ function WriteGoodsForm() {
         id: Number(pathname.split("/")[2]),
       };
       dispatch(updateGoods(board)).then(() => {
-        dispatch(loadGoods()).then(() => {
+        dispatch(loadGoods({ searchValue: "" })).then(() => {
           navigate("/goodsDetail/" + board.id);
         });
       });
@@ -90,7 +90,7 @@ function WriteGoodsForm() {
         id: Date.parse(new Date()),
       };
       dispatch(saveGoods(board)).then(() => {
-        dispatch(loadGoods()).then(() => {
+        dispatch(loadGoods({ searchValue: "" })).then(() => {
           navigate("/usedGoods", { replace: true });
         });
       });
