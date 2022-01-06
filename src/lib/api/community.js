@@ -77,6 +77,7 @@ export const saveComment = ({ comment, board }) => {
             .collection("community")
             .doc(uid)
             .collection("comments")
+            .orderBy("date", "desc")
             .get()
             .then((res) => {
               return res.docs.map((doc) => doc.data());
@@ -96,6 +97,7 @@ export const loadComments = ({ boardId }) => {
         .collection("community")
         .doc(uid)
         .collection("comments")
+        .orderBy("date", "desc")
         .get()
         .then((res) => {
           return res.docs.map((doc) => doc.data());
