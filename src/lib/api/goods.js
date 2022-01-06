@@ -59,3 +59,46 @@ export const loadMyGoodsList = ({ user }) => {
       return res.docs.map((doc) => doc.data());
     });
 };
+
+export const saveComment = ({ comment, board }) => {
+  return firestore
+    .collection("goods")
+    .where("id", "==", board.id)
+    .get()
+    .then((res) => {
+      const uid = res.docs[0].id;
+      firestore
+        .collection("goods")
+        .doc(uid)
+        .collection("comments")
+        .add(comment)
+        .then(() => {
+          firestore
+            .collection("goods")
+            .doc(uid)
+            .collection("comments")
+            .get()
+            .then((res) => {
+              return res.docs.map((doc) => doc.data());
+            });
+        });
+    });
+};
+
+export const loadComments = ({ boardId }) => {
+  return firestore
+    .collection("goods")
+    .where("id", "==", boardId)
+    .get()
+    .then((res) => {
+      const uid = res.docs[0].id;
+      firestore
+        .collection("goods")
+        .doc(uid)
+        .collection("comments")
+        .get()
+        .then((res) => {
+          return res.docs.map((doc) => doc.data());
+        });
+    });
+};

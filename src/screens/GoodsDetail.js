@@ -1,8 +1,13 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import { Button } from "react-bootstrap";
+import { Button, InputGroup, FormControl } from "react-bootstrap";
 import Comments from "../components/Comments";
-import { deleteGoods, loadGoods } from "../modules/goods";
+import {
+  deleteGoods,
+  loadGoods,
+  saveComment,
+  loadComments,
+} from "../modules/goods";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -38,25 +43,23 @@ const ButtonBox = styled.div`
   display: flex;
   justify-content: flex-end;
 `;
+const CommentInputContainer = styled.div`
+  margin: 10px 0px;
+`;
 
 function GoodsDetail() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { pathname } = useLocation();
-  const { boards } = useSelector(({ goods }) => ({
+  const { boards, user, comments } = useSelector(({ goods, user }) => ({
     boards: goods.goodsBoards,
+    user: user.user,
+    comments: goods.comments,
   }));
 
   const boardId = Number(pathname.split("/")[2]);
-  const [board, setBoard] = useState({ title: "", content: "", userId: "" });
-  const [comments, setComments] = useState([
-    { id: 1, content: "댓글댓글", user: "유저명" },
-    { id: 2, content: "댓글댓글", user: "유저명" },
-    { id: 3, content: "댓글댓글", user: "유저명" },
-    { id: 4, content: "댓글댓글", user: "유저명" },
-    { id: 5, content: "댓글댓글", user: "유저명" },
-    { id: 6, content: "댓글댓글", user: "유저명" },
-  ]);
+  const [board, setBoard] = useState({});
+  const [commentValue, setCommentValue] = useState("");
 
   const _handleUpdate = () => {
     navigate("/updateGoodsBoard/" + boardId);
@@ -68,6 +71,22 @@ function GoodsDetail() {
       });
     });
   };
+  const _handleCommentChange = (e) => {
+    setCommentValue(e.target.value);
+  };
+  const _handleCommentSubmit = () => {
+    const comment = {
+      content: commentValue,
+      userId: user.displayName,
+      date: new Date(),
+    };
+    dispatch(
+      saveComment({
+        board,
+        comment,
+      }),
+    );
+  };
 
   useEffect(() => {
     setBoard(
@@ -75,6 +94,7 @@ function GoodsDetail() {
         return item.id === boardId;
       }),
     );
+    dispatch(loadComments({ boardId }));
   }, []);
 
   return (
@@ -98,6 +118,14 @@ function GoodsDetail() {
           </Button>
         </ButtonBox>
       </StyledBoard>
+      <CommentInputContainer>
+        <InputGroup>
+          <FormControl value={commentValue} onChange={_handleCommentChange} />
+          <Button variant="outline-secondary" onClick={_handleCommentSubmit}>
+            작성
+          </Button>
+        </InputGroup>
+      </CommentInputContainer>
       <Comments comments={comments} />
     </Container>
   );

@@ -51,9 +51,10 @@ function BoardDetail() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { pathname } = useLocation();
-  const { boards, user } = useSelector(({ community, user }) => ({
+  const { boards, user, comments } = useSelector(({ community, user }) => ({
     boards: community.boards,
     user: user.user,
+    comments: community.comments,
   }));
 
   const boardId = Number(pathname.split("/")[2]);
@@ -125,7 +126,7 @@ function BoardDetail() {
           </Button>
         </InputGroup>
       </CommentInputContainer>
-      <Comments board={board} />
+      <Comments comments={comments} />
     </Container>
   );
 }

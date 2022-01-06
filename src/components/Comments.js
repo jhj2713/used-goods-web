@@ -1,4 +1,3 @@
-import { useSelector } from "react-redux";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -12,18 +11,14 @@ const StyledComment = styled.div`
 const StyledContent = styled.p``;
 const StyledUser = styled.p``;
 
-function Comments() {
-  const { comments } = useSelector(({ community }) => ({
-    comments: community.comments,
-  }));
-
+function Comments({ comments }) {
   return (
     <Container>
       {comments &&
         comments.map((item) => (
           <StyledComment key={item.id}>
             <StyledContent>{item.content}</StyledContent>
-            <StyledUser>{item.user}</StyledUser>
+            <StyledUser>{item.userId}</StyledUser>
           </StyledComment>
         ))}
     </Container>
