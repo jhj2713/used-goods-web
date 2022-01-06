@@ -42,7 +42,6 @@ export const deleteComment = createRequestThunk(
 const initialState = {
   boards: null,
   comments: null,
-  deleteBoard: null,
 };
 
 export default handleActions(
@@ -57,9 +56,8 @@ export default handleActions(
       boards: null,
       error,
     }),
-    [SAVE_SUCCESS]: (state, { payload: save }) => ({
+    [SAVE_SUCCESS]: (state) => ({
       ...state,
-      save,
       error: null,
     }),
     [SAVE_FAILURE]: (state, { payload: error }) => ({
@@ -67,9 +65,8 @@ export default handleActions(
       save: null,
       error,
     }),
-    [UPDATE_SUCCESS]: (state, { payload: update }) => ({
+    [UPDATE_SUCCESS]: (state) => ({
       ...state,
-      update,
       error: null,
     }),
     [UPDATE_FAILURE]: (state, { payload: error }) => ({
@@ -77,9 +74,8 @@ export default handleActions(
       update: null,
       error,
     }),
-    [DELETE_SUCCESS]: (state, { payload: deleteBoard }) => ({
+    [DELETE_SUCCESS]: (state) => ({
       ...state,
-      deleteBoard,
       error: null,
     }),
     [DELETE_FAILURE]: (state, { payload: error }) => ({

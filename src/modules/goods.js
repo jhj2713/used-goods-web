@@ -18,6 +18,8 @@ const [SAVE_COMMENT, SAVE_COMMENT_SUCCESS, SAVE_COMMENT_FAILURE] =
   createRequestActionTypes("goods/SAVE_COMMENT");
 const [LOAD_COMMENTS, LOAD_COMMENTS_SUCCESS, LOAD_COMMENTS_FAILURE] =
   createRequestActionTypes("goods/LOAD_COMMENTS");
+const [DELETE_COMMENT, DELETE_COMMENT_SUCCESS, DELETE_COMMENT_FAILURE] =
+  createRequestActionTypes("goods/DELETE_COMMENT");
 
 export const loadGoods = createRequestThunk(LOAD, goodsAPI.loadGoods);
 export const saveGoods = createRequestThunk(SAVE, goodsAPI.saveGoods);
@@ -31,9 +33,13 @@ export const saveComment = createRequestThunk(
   SAVE_COMMENT,
   goodsAPI.saveComment,
 );
-export const loadComments = createRequestThunk(
+export const loadGoodsComments = createRequestThunk(
   LOAD_COMMENTS,
-  goodsAPI.loadComments,
+  goodsAPI.loadGoodsComments,
+);
+export const deleteGoodsComment = createRequestThunk(
+  DELETE_COMMENT,
+  goodsAPI.deleteGoodsComment,
 );
 
 const initialState = {
@@ -113,6 +119,15 @@ export default handleActions(
     [LOAD_COMMENTS_FAILURE]: (state, { payload: error }) => ({
       ...state,
       comments: null,
+      error,
+    }),
+    [DELETE_COMMENT_SUCCESS]: (state) => ({
+      ...state,
+      error: null,
+    }),
+    [DELETE_COMMENT_FAILURE]: (state, { payload: error }) => ({
+      ...state,
+      comment: null,
       error,
     }),
   },

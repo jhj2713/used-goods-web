@@ -1,7 +1,8 @@
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { deleteComment, loadComments } from "../modules/community";
+import { deleteGoodsComment, loadGoodsComments } from "../modules/goods";
 
 const Container = styled.div`
   margin: 10px;
@@ -27,14 +28,21 @@ const StyledUser = styled.p`
 function Comments({ board, comments }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { pathname } = useLocation();
   const { user } = useSelector(({ user }) => ({
     user: user.user,
   }));
 
   const _handleRemove = (item) => {
-    dispatch(deleteComment({ boardId: board, id: item.id })).then(() => {
-      dispatch(loadComments({ boardId: board }));
-    });
+    if (pathname.includes("goods")) {
+      dispatch(deleteGoodsComment({ boardId: board, id: item.id })).then(() => {
+        dispatch(loadGoodsComments({ boardId: board }));
+      });
+    } else {
+      dispatch(deleteComment({ boardId: board, id: item.id })).then(() => {
+        dispatch(loadComments({ boardId: board }));
+      });
+    }
   };
 
   return (

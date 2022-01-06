@@ -6,7 +6,7 @@ import {
   deleteGoods,
   loadGoods,
   saveComment,
-  loadComments,
+  loadGoodsComments,
 } from "../modules/goods";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -99,7 +99,7 @@ function GoodsDetail() {
         }),
       );
     }
-    dispatch(loadComments({ boardId }));
+    dispatch(loadGoodsComments({ boardId }));
   }, []);
 
   return (
@@ -137,7 +137,7 @@ function GoodsDetail() {
           </Button>
         </InputGroup>
       </CommentInputContainer>
-      <Comments comments={comments} />
+      <Comments board={board.id} comments={comments} />
     </Container>
   );
 }

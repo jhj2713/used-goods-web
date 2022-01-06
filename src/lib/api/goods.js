@@ -85,7 +85,7 @@ export const saveComment = ({ comment, board }) => {
     });
 };
 
-export const loadComments = ({ boardId }) => {
+export const loadGoodsComments = ({ boardId }) => {
   return firestore
     .collection("goods")
     .where("id", "==", boardId)
@@ -99,6 +99,31 @@ export const loadComments = ({ boardId }) => {
         .get()
         .then((res) => {
           return res.docs.map((doc) => doc.data());
+        });
+    });
+};
+
+export const deleteGoodsComment = ({ boardId, id }) => {
+  firestore
+    .collection("goods")
+    .where("id", "==", boardId)
+    .get()
+    .then((res) => {
+      const uid = res.docs[0].id;
+      firestore
+        .collection("goods")
+        .doc(uid)
+        .collection("comments")
+        .where("id", "==", id)
+        .get()
+        .then((res) => {
+          const commentId = res.docs[0].id;
+          firestore
+            .collection("goods")
+            .doc(uid)
+            .collection("comments")
+            .doc(commentId)
+            .delete();
         });
     });
 };
