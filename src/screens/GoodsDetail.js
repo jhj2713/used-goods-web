@@ -85,7 +85,9 @@ function GoodsDetail() {
         board,
         comment,
       }),
-    );
+    ).then(() => {
+      setCommentValue("");
+    });
   };
 
   useEffect(() => {

@@ -67,13 +67,13 @@ export const saveComment = ({ comment, board }) => {
     .get()
     .then((res) => {
       const uid = res.docs[0].id;
-      firestore
+      return firestore
         .collection("goods")
         .doc(uid)
         .collection("comments")
         .add(comment)
         .then(() => {
-          firestore
+          return firestore
             .collection("goods")
             .doc(uid)
             .collection("comments")
@@ -92,7 +92,7 @@ export const loadComments = ({ boardId }) => {
     .get()
     .then((res) => {
       const uid = res.docs[0].id;
-      firestore
+      return firestore
         .collection("goods")
         .doc(uid)
         .collection("comments")
