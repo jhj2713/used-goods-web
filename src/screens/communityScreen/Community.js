@@ -2,11 +2,7 @@ import { useState, useEffect } from "react";
 import { Button, ListGroup } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  loadBoards,
-  paginationNextBoard,
-  paginationPrevBoard,
-} from "../../modules/community";
+import { loadBoards } from "../../modules/community";
 import Pagination from "../../components/Pagination";
 import Search from "../../components/Search";
 import styled from "styled-components";
@@ -46,34 +42,37 @@ const ButtonBox = styled.div`
 function Community() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { boards, isLast, lastDoc } = useSelector(({ community }) => ({
+  const { boards } = useSelector(({ community }) => ({
     boards: community.boards,
-    isLast: community.isLast,
-    lastDoc: community.lastDoc,
   }));
 
   const [listItem, setListItem] = useState([]);
   const [page, setPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
+  const [isLast, setIsLast] = useState(false);
 
   const _handlePrev = () => {
-    dispatch(paginationPrevBoard({ lastDoc }));
     setPage((page) => page - 1);
   };
   const _handleNext = () => {
-    dispatch(paginationNextBoard({ lastDoc }));
     setPage((page) => page + 1);
   };
   const _handleSearch = () => {
-    console.log(searchValue);
+    dispatch(loadBoards({ searchValue }));
   };
 
   useEffect(() => {
-    dispatch(loadBoards());
+    dispatch(loadBoards({ searchValue }));
   }, []);
   useEffect(() => {
     setListItem(boards);
   }, [boards]);
+  useEffect(() => {
+    setListItem(boards.slice((page - 1) * 7, page * 7));
+    if (boards.length < 7 * page) {
+      setIsLast(true);
+    }
+  }, [boards, page]);
 
   return (
     <Container>
@@ -85,22 +84,23 @@ function Community() {
         />
       </SearchBox>
       <ListGroup variant="flush">
-        {listItem.map((item) => (
-          <ListGroup.Item key={item.id}>
-            <StyledTitle
-              style={{ float: "left" }}
-              onClick={() => navigate("/boarddetail/" + item.id)}
-            >
-              {item.title}
-            </StyledTitle>
-            <StyledUser
-              style={{ float: "right" }}
-              onClick={() => navigate("/otheruser/" + item.userId)}
-            >
-              {item.userId}
-            </StyledUser>
-          </ListGroup.Item>
-        ))}
+        {listItem &&
+          listItem.map((item) => (
+            <ListGroup.Item key={item.id}>
+              <StyledTitle
+                style={{ float: "left" }}
+                onClick={() => navigate("/boarddetail/" + item.id)}
+              >
+                {item.title}
+              </StyledTitle>
+              <StyledUser
+                style={{ float: "right" }}
+                onClick={() => navigate("/otheruser/" + item.userId)}
+              >
+                {item.userId}
+              </StyledUser>
+            </ListGroup.Item>
+          ))}
       </ListGroup>
       <PageContainer>
         <Pagination

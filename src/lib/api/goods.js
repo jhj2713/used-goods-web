@@ -15,57 +15,28 @@ export const updateGoods = (board) => {
     });
 };
 
-export const loadGoods = () => {
-  return firestore
-    .collection("goods")
-    .orderBy("date", "desc")
-    .limit(6)
-    .get()
-    .then((res) => {
-      const goodsBoards = res.docs.map((doc) => doc.data());
-      const lastDoc = res.docs[res.docs.length - 1];
-      let isLast = false;
-      if (res.size < 6) {
-        isLast = true;
-      }
-      return { goodsBoards, lastDoc, isLast };
-    });
-};
-
-export const paginationNextBoard = ({ lastDoc }) => {
-  return firestore
-    .collection("goods")
-    .orderBy("date", "desc")
-    .startAfter(lastDoc)
-    .limit(6)
-    .get()
-    .then((res) => {
-      const goodsBoards = res.docs.map((doc) => doc.data());
-      const lastDoc = res.docs[res.docs.length - 1];
-      let isLast = false;
-      if (res.size < 6) {
-        isLast = true;
-      }
-      return { goodsBoards, lastDoc, isLast };
-    });
-};
-
-export const paginationPrevBoard = ({ lastDoc }) => {
-  return firestore
-    .collection("goods")
-    .orderBy("date", "desc")
-    .endBefore(lastDoc)
-    .limit(6)
-    .get()
-    .then((res) => {
-      const goodsBoards = res.docs.map((doc) => doc.data());
-      const lastDoc = res.docs[res.docs.length - 1];
-      let isLast = true;
-      if (res.size >= 6) {
-        isLast = false;
-      }
-      return { goodsBoards, lastDoc, isLast };
-    });
+export const loadGoods = ({ searchValue }) => {
+  if (searchValue) {
+    return firestore
+      .collection("goods")
+      .orderBy("date", "desc")
+      .get()
+      .then((res) => {
+        const goodsBoards = res.docs
+          .filter((doc) => doc.data().title.includes(searchValue))
+          .map((doc) => doc.data());
+        return { goodsBoards };
+      });
+  } else {
+    return firestore
+      .collection("goods")
+      .orderBy("date", "desc")
+      .get()
+      .then((res) => {
+        const goodsBoards = res.docs.map((doc) => doc.data());
+        return { goodsBoards };
+      });
+  }
 };
 
 export const deleteGoods = (board) => {

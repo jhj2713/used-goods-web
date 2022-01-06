@@ -2,11 +2,7 @@ import { useState, useEffect } from "react";
 import { Row, Col, Card, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  loadGoods,
-  paginationPrevBoard,
-  paginationNextBoard,
-} from "../../modules/goods";
+import { loadGoods } from "../../modules/goods";
 import Pagination from "../../components/Pagination";
 import styled from "styled-components";
 import Search from "../../components/Search";
@@ -36,34 +32,37 @@ const ButtonBox = styled.div`
 function GoodsList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { goodsBoards, isLast, lastDoc } = useSelector(({ goods }) => ({
+  const { goodsBoards } = useSelector(({ goods }) => ({
     goodsBoards: goods.goodsBoards,
-    isLast: goods.isLast,
-    lastDoc: goods.lastDoc,
   }));
 
   const [goods, setGoods] = useState([]);
   const [page, setPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
+  const [isLast, setIsLast] = useState(false);
 
   const _handlePrev = () => {
-    dispatch(paginationPrevBoard({ lastDoc }));
     setPage((page) => page - 1);
   };
   const _handleNext = () => {
-    dispatch(paginationNextBoard({ lastDoc }));
     setPage((page) => page + 1);
   };
   const _handleSearch = () => {
-    console.log(searchValue);
+    dispatch(loadGoods({ searchValue }));
   };
 
   useEffect(() => {
-    dispatch(loadGoods());
+    dispatch(loadGoods({ searchValue }));
   }, []);
   useEffect(() => {
     setGoods(goodsBoards);
   }, [goodsBoards]);
+  useEffect(() => {
+    setGoods(goodsBoards.slice((page - 1) * 6, page * 6));
+    if (goodsBoards.length < 6 * page) {
+      setIsLast(true);
+    }
+  }, [goodsBoards, page]);
 
   return (
     <Container>
@@ -75,20 +74,21 @@ function GoodsList() {
         />
       </SearchBox>
       <Row xs={1} md={2} lg={3} className="g-4">
-        {goods.map((item) => (
-          <Col key={item.id}>
-            <StyledCard
-              onClick={() => {
-                navigate("/goodsDetail/" + item.id);
-              }}
-            >
-              <Card.Img variant="top" src="/image.png" />
-              <Card.Body>
-                <Card.Title>{item.title}</Card.Title>
-              </Card.Body>
-            </StyledCard>
-          </Col>
-        ))}
+        {goods &&
+          goods.map((item) => (
+            <Col key={item.id}>
+              <StyledCard
+                onClick={() => {
+                  navigate("/goodsDetail/" + item.id);
+                }}
+              >
+                <Card.Img variant="top" src="/image.png" />
+                <Card.Body>
+                  <Card.Title>{item.title}</Card.Title>
+                </Card.Body>
+              </StyledCard>
+            </Col>
+          ))}
       </Row>
       <PageContainer>
         <Pagination

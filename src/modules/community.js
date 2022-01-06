@@ -12,16 +12,6 @@ const [UPDATE, UPDATE_SUCCESS, UPDATE_FAILURE] =
   createRequestActionTypes("community/UPDATE");
 const [DELETE, DELETE_SUCCESS, DELETE_FAILURE] =
   createRequestActionTypes("community/DELETE");
-const [
-  PAGINATION_NEXT_BOARD,
-  PAGINATION_NEXT_BOARD_SUCCESS,
-  PAGINATION_NEXT_BOARD_FAILURE,
-] = createRequestActionTypes("community/PAGINATION_NEXT_BOARD");
-const [
-  PAGINATION_PREV_BOARD,
-  PAGINATION_PREV_BOARD_SUCCESS,
-  PAGINATION_PREV_BOARD_FAILURE,
-] = createRequestActionTypes("community/PAGINATION_PREV_BOARD");
 const [LOAD_WRITE_LIST, LOAD_WRITE_LIST_SUCCESS, LOAD_WRITE_LIST_FAILURE] =
   createRequestActionTypes("community/LOAT_WRITE_LIST");
 
@@ -29,14 +19,6 @@ export const loadBoards = createRequestThunk(LOAD, comAPI.loadBoards);
 export const saveBoard = createRequestThunk(SAVE, comAPI.saveBoard);
 export const updateBoard = createRequestThunk(UPDATE, comAPI.updateBoard);
 export const deleteBoard = createRequestThunk(DELETE, comAPI.deleteBoard);
-export const paginationNextBoard = createRequestThunk(
-  PAGINATION_NEXT_BOARD,
-  comAPI.paginationNextBoard,
-);
-export const paginationPrevBoard = createRequestThunk(
-  PAGINATION_PREV_BOARD,
-  comAPI.paginationPrevBoard,
-);
 export const loadWriteList = createRequestThunk(
   LOAD_WRITE_LIST,
   comAPI.loadMyWriteList,
@@ -47,7 +29,6 @@ const initialState = {
   lastDoc: null,
   save: null,
   deleteBoard: null,
-  isLast: false,
 };
 
 export default handleActions(
@@ -94,34 +75,6 @@ export default handleActions(
     [DELETE_FAILURE]: (state, { payload: error }) => ({
       ...state,
       delete: null,
-      error,
-    }),
-    [PAGINATION_NEXT_BOARD_SUCCESS]: (state, { payload: docs }) => ({
-      ...state,
-      boards: docs.boards,
-      lastDoc: docs.lastDoc,
-      isLast: docs.isLast,
-      error: null,
-    }),
-    [PAGINATION_NEXT_BOARD_FAILURE]: (state, { payload: error }) => ({
-      ...state,
-      boards: null,
-      lastDoc: null,
-      isLast: null,
-      error,
-    }),
-    [PAGINATION_PREV_BOARD_SUCCESS]: (state, { payload: docs }) => ({
-      ...state,
-      boards: docs.boards,
-      lastDoc: docs.lastDoc,
-      isLast: docs.isLast,
-      error: null,
-    }),
-    [PAGINATION_PREV_BOARD_FAILURE]: (state, { payload: error }) => ({
-      ...state,
-      boards: null,
-      lastDoc: null,
-      isLast: null,
       error,
     }),
     [LOAD_WRITE_LIST_SUCCESS]: (state, { payload: boards }) => ({

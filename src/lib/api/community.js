@@ -15,57 +15,28 @@ export const updateBoard = (board) => {
     });
 };
 
-export const loadBoards = () => {
-  return firestore
-    .collection("community")
-    .orderBy("date", "desc")
-    .limit(7)
-    .get()
-    .then((res) => {
-      const boards = res.docs.map((doc) => doc.data());
-      const lastDoc = res.docs[res.docs.length - 1];
-      let isLast = false;
-      if (res.size < 7) {
-        isLast = true;
-      }
-      return { boards, lastDoc, isLast };
-    });
-};
-
-export const paginationNextBoard = ({ lastDoc }) => {
-  return firestore
-    .collection("community")
-    .orderBy("date", "desc")
-    .startAfter(lastDoc)
-    .limit(7)
-    .get()
-    .then((res) => {
-      const boards = res.docs.map((doc) => doc.data());
-      const lastDoc = res.docs[res.docs.length - 1];
-      let isLast = false;
-      if (res.size < 7) {
-        isLast = true;
-      }
-      return { boards, lastDoc, isLast };
-    });
-};
-
-export const paginationPrevBoard = ({ lastDoc }) => {
-  return firestore
-    .collection("community")
-    .orderBy("date", "desc")
-    .endBefore(lastDoc)
-    .limit(7)
-    .get()
-    .then((res) => {
-      const boards = res.docs.map((doc) => doc.data());
-      const lastDoc = res.docs[res.docs.length - 1];
-      let isLast = true;
-      if (res.size >= 7) {
-        isLast = false;
-      }
-      return { boards, lastDoc, isLast };
-    });
+export const loadBoards = ({ searchValue }) => {
+  if (searchValue) {
+    return firestore
+      .collection("community")
+      .orderBy("date", "desc")
+      .get()
+      .then((res) => {
+        const boards = res.docs
+          .filter((doc) => doc.data().title.includes(searchValue))
+          .map((doc) => doc.data());
+        return { boards };
+      });
+  } else {
+    return firestore
+      .collection("community")
+      .orderBy("date", "desc")
+      .get()
+      .then((res) => {
+        const boards = res.docs.map((doc) => doc.data());
+        return { boards };
+      });
+  }
 };
 
 export const deleteBoard = (board) => {

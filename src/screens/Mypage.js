@@ -82,7 +82,7 @@ function Mypage() {
                   }}
                 >
                   <p>중고거래 글</p>
-                  <p>{usedGoodsBoards.length}</p>
+                  <p>{usedGoodsBoards && usedGoodsBoards.length}</p>
                 </div>
               </StyledCol>
               <StyledCol>
@@ -93,7 +93,7 @@ function Mypage() {
                   }}
                 >
                   <p>커뮤니티 글</p>
-                  <p>{communityBoards.length}</p>
+                  <p>{communityBoards && communityBoards.length}</p>
                 </div>
               </StyledCol>
             </Row>
