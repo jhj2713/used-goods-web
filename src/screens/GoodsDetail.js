@@ -113,14 +113,20 @@ function GoodsDetail() {
         <StyledContent
           dangerouslySetInnerHTML={{ __html: board.content }}
         ></StyledContent>
-        <ButtonBox>
-          <Button variant="outline-secondary" size="sm" onClick={_handleUpdate}>
-            수정하기
-          </Button>
-          <Button variant="outline-danger" size="sm" onClick={_handleDelete}>
-            삭제하기
-          </Button>
-        </ButtonBox>
+        {board.userId === user.displayName && (
+          <ButtonBox>
+            <Button
+              variant="outline-secondary"
+              size="sm"
+              onClick={_handleUpdate}
+            >
+              수정하기
+            </Button>
+            <Button variant="outline-danger" size="sm" onClick={_handleDelete}>
+              삭제하기
+            </Button>
+          </ButtonBox>
+        )}
       </StyledBoard>
       <CommentInputContainer>
         <InputGroup>
