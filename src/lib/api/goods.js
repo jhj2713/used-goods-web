@@ -25,7 +25,7 @@ export const loadGoods = ({ searchValue }) => {
         const goodsBoards = res.docs
           .filter((doc) => doc.data().title.includes(searchValue))
           .map((doc) => doc.data());
-        return { goodsBoards };
+        return goodsBoards;
       });
   } else {
     return firestore
@@ -34,7 +34,7 @@ export const loadGoods = ({ searchValue }) => {
       .get()
       .then((res) => {
         const goodsBoards = res.docs.map((doc) => doc.data());
-        return { goodsBoards };
+        return goodsBoards;
       });
   }
 };

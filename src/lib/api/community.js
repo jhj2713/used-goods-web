@@ -25,7 +25,7 @@ export const loadBoards = ({ searchValue }) => {
         const boards = res.docs
           .filter((doc) => doc.data().title.includes(searchValue))
           .map((doc) => doc.data());
-        return { boards };
+        return boards;
       });
   } else {
     return firestore
@@ -34,7 +34,7 @@ export const loadBoards = ({ searchValue }) => {
       .get()
       .then((res) => {
         const boards = res.docs.map((doc) => doc.data());
-        return { boards };
+        return boards;
       });
   }
 };
@@ -57,5 +57,48 @@ export const loadMyWriteList = ({ user }) => {
     .get()
     .then((res) => {
       return res.docs.map((doc) => doc.data());
+    });
+};
+
+export const saveComment = ({ comment, board }) => {
+  return firestore
+    .collection("community")
+    .where("id", "==", board.id)
+    .get()
+    .then((res) => {
+      const uid = res.docs[0].id;
+      firestore
+        .collection("community")
+        .doc(uid)
+        .collection("comments")
+        .add(comment)
+        .then(() => {
+          firestore
+            .collection("community")
+            .doc(uid)
+            .collection("comments")
+            .get()
+            .then((res) => {
+              return res.docs.map((doc) => doc.data());
+            });
+        });
+    });
+};
+
+export const loadComments = ({ boardId }) => {
+  return firestore
+    .collection("community")
+    .where("id", "==", boardId)
+    .get()
+    .then((res) => {
+      const uid = res.docs[0].id;
+      firestore
+        .collection("community")
+        .doc(uid)
+        .collection("comments")
+        .get()
+        .then((res) => {
+          return res.docs.map((doc) => doc.data());
+        });
     });
 };

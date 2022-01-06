@@ -26,16 +26,15 @@ export const loadWriteGoods = createRequestThunk(
 
 const initialState = {
   goodsBoards: null,
-  lastDoc: null,
   save: null,
   deleteBoard: null,
 };
 
 export default handleActions(
   {
-    [LOAD_SUCCESS]: (state, { payload: doc }) => ({
+    [LOAD_SUCCESS]: (state, { payload: goodsBoards }) => ({
       ...state,
-      goodsBoards: doc.goodsBoards,
+      goodsBoards: goodsBoards,
       error: null,
     }),
     [LOAD_FAILURE]: (state, { payload: error }) => ({

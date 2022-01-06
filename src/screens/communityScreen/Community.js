@@ -68,9 +68,11 @@ function Community() {
     setListItem(boards);
   }, [boards]);
   useEffect(() => {
-    setListItem(boards.slice((page - 1) * 7, page * 7));
-    if (boards.length < 7 * page) {
-      setIsLast(true);
+    if (boards) {
+      setListItem(boards.slice((page - 1) * 7, page * 7));
+      if (boards.length < 7 * page) {
+        setIsLast(true);
+      }
     }
   }, [boards, page]);
 

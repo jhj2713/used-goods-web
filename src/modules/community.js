@@ -14,6 +14,10 @@ const [DELETE, DELETE_SUCCESS, DELETE_FAILURE] =
   createRequestActionTypes("community/DELETE");
 const [LOAD_WRITE_LIST, LOAD_WRITE_LIST_SUCCESS, LOAD_WRITE_LIST_FAILURE] =
   createRequestActionTypes("community/LOAT_WRITE_LIST");
+const [SAVE_COMMENT, SAVE_COMMENT_SUCCESS, SAVE_COMMENT_FAILURE] =
+  createRequestActionTypes("community/SAVE_COMMENT");
+const [LOAD_COMMENTS, LOAD_COMMENTS_SUCCESS, LOAD_COMMENTS_FAILURE] =
+  createRequestActionTypes("community/LOAD_COMMENTS");
 
 export const loadBoards = createRequestThunk(LOAD, comAPI.loadBoards);
 export const saveBoard = createRequestThunk(SAVE, comAPI.saveBoard);
@@ -23,28 +27,28 @@ export const loadWriteList = createRequestThunk(
   LOAD_WRITE_LIST,
   comAPI.loadMyWriteList,
 );
+export const saveComment = createRequestThunk(SAVE_COMMENT, comAPI.saveComment);
+export const loadComments = createRequestThunk(
+  LOAD_COMMENTS,
+  comAPI.loadComments,
+);
 
 const initialState = {
   boards: null,
-  lastDoc: null,
-  save: null,
+  comments: null,
   deleteBoard: null,
 };
 
 export default handleActions(
   {
-    [LOAD_SUCCESS]: (state, { payload: doc }) => ({
+    [LOAD_SUCCESS]: (state, { payload: boards }) => ({
       ...state,
-      boards: doc.boards,
-      lastDoc: doc.lastDoc,
-      isLast: doc.isLast,
+      boards: boards,
       error: null,
     }),
     [LOAD_FAILURE]: (state, { payload: error }) => ({
       ...state,
       boards: null,
-      lastDoc: null,
-      isLast: null,
       error,
     }),
     [SAVE_SUCCESS]: (state, { payload: save }) => ({
@@ -85,6 +89,26 @@ export default handleActions(
     [LOAD_WRITE_LIST_FAILURE]: (state, { payload: error }) => ({
       ...state,
       boards: null,
+      error,
+    }),
+    [SAVE_COMMENT_SUCCESS]: (state, { payload: comments }) => ({
+      ...state,
+      comments,
+      error: null,
+    }),
+    [SAVE_COMMENT_FAILURE]: (state, { payload: error }) => ({
+      ...state,
+      comments: null,
+      error,
+    }),
+    [LOAD_COMMENTS_SUCCESS]: (state, { payload: comments }) => ({
+      ...state,
+      comments,
+      error: null,
+    }),
+    [LOAD_COMMENTS_FAILURE]: (state, { payload: error }) => ({
+      ...state,
+      comments: null,
       error,
     }),
   },
