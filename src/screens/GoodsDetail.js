@@ -46,6 +46,11 @@ const ButtonBox = styled.div`
 const CommentInputContainer = styled.div`
   margin: 10px 0px;
 `;
+const StyledDate = styled.p`
+  display: flex;
+  justify-content: flex-end;
+  margin: 5px;
+`;
 
 function GoodsDetail() {
   const navigate = useNavigate();
@@ -59,6 +64,7 @@ function GoodsDetail() {
 
   const boardId = Number(pathname.split("/")[2]);
   const [board, setBoard] = useState({});
+  const [date, setDate] = useState("");
   const [commentValue, setCommentValue] = useState("");
 
   const _handleUpdate = () => {
@@ -101,6 +107,19 @@ function GoodsDetail() {
     }
     dispatch(loadGoodsComments({ boardId }));
   }, []);
+  useEffect(() => {
+    if (board.date) {
+      const date = new Date(board.date.seconds * 1000);
+      const dateFormat =
+        date.getFullYear() +
+        "/" +
+        date.getMonth() +
+        1 +
+        "/" +
+        date.getDate().toString().padStart(2, "0");
+      setDate(dateFormat);
+    }
+  }, [board]);
 
   return (
     <Container>
@@ -111,6 +130,7 @@ function GoodsDetail() {
             {board.userId}
           </StyledUser>
         </TitleBox>
+        <StyledDate>{date}</StyledDate>
         <StyledContent
           dangerouslySetInnerHTML={{ __html: board.content }}
         ></StyledContent>
